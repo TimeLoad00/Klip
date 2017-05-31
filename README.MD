@@ -16,4 +16,4 @@ The Klip Compiler takes high-level code as its input and compiles it down to low
 
 Even though I say this is a "simple programming language", if you do not already have an understanding of how programming languages work then this may still be confusing. In the future I plan to create a tutorial series that aims to teach people how to create their own programming language starting from the very basics and leading up to the level of Klip where people will hopefully have enough understanding to continue developing their own language.
 
-The KlipBundleC# is a zip file that you can download which contains all the source code, the compiled programs and example code for you to compile and execute yourself.
+The KlipBundleC# is a zip file that you can download which contains all the source code, the compiled programs and example code for you to compile and execute yourself. There's also example code in the examples folder.
