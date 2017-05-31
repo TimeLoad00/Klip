@@ -1,0 +1,7 @@
+import system
+
+function Main()
+{
+    PrintLine("Hello World")
+    ReadLine()
+}
