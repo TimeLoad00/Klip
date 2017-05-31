@@ -1,0 +1,21 @@
+Ã:Main
+.repeat0
+pushString "hello world"
+call PrintLine
+goto .repeat0
+ret
+:Print
+print
+ret
+:PrintLine
+printLine
+ret
+:Read
+read
+ret
+:ReadLine
+readLine
+ret
+:InputString
+inputString
+ret

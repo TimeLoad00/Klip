@@ -1,0 +1,6 @@
+C:\Users\CUT0004\Documents\Programming\C#\Klip\KlipVM\KlipRT\KlipRT\bin\Debug\KlipRT.exe.config
+C:\Users\CUT0004\Documents\Programming\C#\Klip\KlipVM\KlipRT\KlipRT\obj\Debug\KlipRT.csprojResolveAssemblyReference.cache
+C:\Users\CUT0004\Documents\Programming\C#\Klip\KlipVM\KlipRT\KlipRT\bin\Debug\KlipRT.exe
+C:\Users\CUT0004\Documents\Programming\C#\Klip\KlipVM\KlipRT\KlipRT\bin\Debug\KlipRT.pdb
+C:\Users\CUT0004\Documents\Programming\C#\Klip\KlipVM\KlipRT\KlipRT\obj\Debug\KlipRT.exe
+C:\Users\CUT0004\Documents\Programming\C#\Klip\KlipVM\KlipRT\KlipRT\obj\Debug\KlipRT.pdb

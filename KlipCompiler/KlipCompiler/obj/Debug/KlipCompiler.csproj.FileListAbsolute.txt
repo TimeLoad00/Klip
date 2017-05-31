@@ -1,0 +1,6 @@
+C:\Users\CUT0004\Documents\Programming\C#\Klip\KlipVM\KlipCompiler\KlipCompiler\bin\Debug\KlipCompiler.exe.config
+C:\Users\CUT0004\Documents\Programming\C#\Klip\KlipVM\KlipCompiler\KlipCompiler\bin\Debug\KlipCompiler.exe
+C:\Users\CUT0004\Documents\Programming\C#\Klip\KlipVM\KlipCompiler\KlipCompiler\bin\Debug\KlipCompiler.pdb
+C:\Users\CUT0004\Documents\Programming\C#\Klip\KlipVM\KlipCompiler\KlipCompiler\obj\Debug\KlipCompiler.csprojResolveAssemblyReference.cache
+C:\Users\CUT0004\Documents\Programming\C#\Klip\KlipVM\KlipCompiler\KlipCompiler\obj\Debug\KlipCompiler.exe
+C:\Users\CUT0004\Documents\Programming\C#\Klip\KlipVM\KlipCompiler\KlipCompiler\obj\Debug\KlipCompiler.pdb
