@@ -463,15 +463,7 @@ namespace KlipRT
         {
             bool ifequal = false;
 
-            if ((value1 is byte && value2 is byte) && ((byte)value1 == (byte)value2))
-            {
-                ifequal = true;
-            }
-            else if ((value1 is char && value2 is char) && ((char)value1 == (char)value2))
-            {
-                ifequal = true;
-            }
-            else if ((value1 is int && value2 is int) && ((int)value1 == (int)value2))
+            if ((value1 is int && value2 is int) && ((int)value1 == (int)value2))
             {
                 ifequal = true;
             }
@@ -487,15 +479,7 @@ namespace KlipRT
         {
             bool ifequal = false;
 
-            if ((value1 is byte && value2 is byte) && ((byte)value1 != (byte)value2))
-            {
-                ifequal = true;
-            }
-            else if ((value1 is char && value2 is char) && ((char)value1 != (char)value2))
-            {
-                ifequal = true;
-            }
-            else if ((value1 is int && value2 is int) && ((int)value1 != (int)value2))
+            if ((value1 is int && value2 is int) && ((int)value1 != (int)value2))
             {
                 ifequal = true;
             }
