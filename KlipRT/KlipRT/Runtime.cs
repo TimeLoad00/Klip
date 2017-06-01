@@ -30,7 +30,7 @@ namespace KlipRT
 
         static void Run(Func func)
         {
-            byte opcode = 0;
+            int opcode = 0;
             code.pos = func.location;
             currentFunc = func;
             Block currentBlock = null;
@@ -40,10 +40,10 @@ namespace KlipRT
             {
                 try
                 {
-                    opcode = code.Read();
+                    opcode = code.ReadInt32();
                 }
                 catch { }
-                
+
                 if (opcode == Opcodes.pushInt32)
                 {
                     stack.Push(code.ReadInt32());

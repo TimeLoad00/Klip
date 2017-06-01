@@ -7,3 +7,6 @@ C:\Users\CUT0004\Documents\Programming\C#\Klip\KlipVM\KlipRT\KlipRT\obj\Debug\Kl
 C:\Users\CUT0004\Documents\Programming\Github\Klip\KlipRT\KlipRT\bin\Debug\KlipRT.exe.config
 C:\Users\CUT0004\Documents\Programming\Github\Klip\KlipRT\KlipRT\obj\Debug\KlipRT.exe
 C:\Users\CUT0004\Documents\Programming\Github\Klip\KlipRT\KlipRT\obj\Debug\KlipRT.pdb
+C:\Users\CUT0004\Documents\Programming\Github\Klip\KlipRT\KlipRT\bin\Debug\KlipRT.exe
+C:\Users\CUT0004\Documents\Programming\Github\Klip\KlipRT\KlipRT\bin\Debug\KlipRT.pdb
+C:\Users\CUT0004\Documents\Programming\Github\Klip\KlipRT\KlipRT\obj\Debug\KlipRT.csprojResolveAssemblyReference.cache
