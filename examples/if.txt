@@ -1,0 +1,22 @@
+import system
+
+function Main()
+{
+    Print("input: ")
+    str = InputString()
+
+    if (str == "hello")
+    {
+        PrintLine("if statement")
+    }
+    elseif (str == "world")
+    {
+        PrintLine("elseif statement")
+    }
+    else
+    {
+        PrintLine("else statement")
+    }
+    
+    ReadLine()
+}

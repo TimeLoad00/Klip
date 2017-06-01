@@ -1,0 +1,12 @@
+import system
+
+function Main()
+{
+    call HelloWorld("Hello", " World")
+    ReadLine()
+}
+
+function HelloWorld(v1, v2)
+{
+    PrintLine(v1 + v2)
+}
