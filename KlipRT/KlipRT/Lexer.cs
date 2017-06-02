@@ -8,19 +8,16 @@ namespace KlipRT
 {
     class Lexer
     {
-        public List<Func> funcs;
-        public List<Block> blocks;
-        public Buffer code;
+        public List<Func> funcs = new List<Func>();
+        public List<Block> blocks = new List<Block>();
+        public Buffer code = new Buffer();
 
         public Lexer(string c)
         {
             c = c.Replace(((char)13).ToString(), "");
 
             Func currentFunc = null;
-            funcs = new List<Func>();
-            code = new KlipRT.Buffer();
             Block currentBlock = null;
-            blocks = new List<Block>();
             int blockNumber = 0;
             Stack<Block> blockstack = new Stack<Block>();
 
@@ -44,13 +41,13 @@ namespace KlipRT
                 else if (a.StartsWith("."))
                 {
                     string name = a.Substring(1);
-                    Label l = new Label(name, code.pos);
+                    Label l = new Label(name, code.buffer.Count());
                     currentFunc.labels.Add(l);
                 }
-                else if (a.StartsWith("pushInt32 "))
+                else if (a.StartsWith("pushInt "))
                 {
                     int value = Convert.ToInt32(a.Substring(10));
-                    code.Write(Opcodes.pushInt32);
+                    code.Write(Opcodes.pushInt);
                     code.Write(value);
                 }
                 else if (a.StartsWith("pushString "))
@@ -136,109 +133,77 @@ namespace KlipRT
                 }
                 else if (a == "ife")
                 {
-                    if (currentBlock == null)
-                    {
-                        currentBlock = new IfBlock(blockNumber);
-                        code.Write(Opcodes.ife);
-                        code.Write(blockNumber);
-                        blockNumber++;
-                    }
-                    else
+                    if (currentBlock != null)
                     {
                         blockstack.Push(currentBlock);
-                        currentBlock = new IfBlock(blockNumber);
-                        code.Write(Opcodes.ife);
-                        code.Write(blockNumber);
-                        blockNumber++;
                     }
+
+                    currentBlock = new IfBlock(blockNumber);
+                    code.Write(Opcodes.ife);
+                    code.Write(blockNumber);
+                    blockNumber++;
                 }
                 else if (a == "ifn")
                 {
-                    if (currentBlock == null)
-                    {
-                        currentBlock = new IfBlock(blockNumber);
-                        code.Write(Opcodes.ifn);
-                        code.Write(blockNumber);
-                        blockNumber++;
-                    }
-                    else
+                    if (currentBlock != null)
                     {
                         blockstack.Push(currentBlock);
-                        currentBlock = new IfBlock(blockNumber);
-                        code.Write(Opcodes.ifn);
-                        code.Write(blockNumber);
-                        blockNumber++;
                     }
+
+                    currentBlock = new IfBlock(blockNumber);
+                    code.Write(Opcodes.ifn);
+                    code.Write(blockNumber);
+                    blockNumber++;
                 }
                 else if (a == "elseife")
                 {
-                    if (currentBlock == null)
-                    {
-                        currentBlock = new ElseIfBlock(blockNumber);
-                        code.Write(Opcodes.elseife);
-                        code.Write(blockNumber);
-                        blockNumber++;
-                    }
-                    else
+                    if (currentBlock != null)
                     {
                         blockstack.Push(currentBlock);
-                        currentBlock = new IfBlock(blockNumber);
-                        code.Write(Opcodes.elseife);
-                        code.Write(blockNumber);
-                        blockNumber++;
                     }
+
+                    currentBlock = new ElseIfBlock(blockNumber);
+                    code.Write(Opcodes.elseife);
+                    code.Write(blockNumber);
+                    blockNumber++;
                 }
                 else if (a == "elseifn")
                 {
-                    if (currentBlock == null)
-                    {
-                        currentBlock = new ElseIfBlock(blockNumber);
-                        code.Write(Opcodes.elseifn);
-                        code.Write(blockNumber);
-                        blockNumber++;
-                    }
-                    else
+                    if (currentBlock != null)
                     {
                         blockstack.Push(currentBlock);
-                        currentBlock = new IfBlock(blockNumber);
-                        code.Write(Opcodes.elseifn);
-                        code.Write(blockNumber);
-                        blockNumber++;
                     }
+
+                    currentBlock = new ElseIfBlock(blockNumber);
+                    code.Write(Opcodes.elseifn);
+                    code.Write(blockNumber);
+                    blockNumber++;
                 }
                 else if (a == "else")
                 {
-                    if (currentBlock == null)
-                    {
-                        currentBlock = new ElseBlock(blockNumber);
-                        code.Write(Opcodes.els);
-                        code.Write(blockNumber);
-                        blockNumber++;
-                    }
-                    else
+                    if (currentBlock != null)
                     {
                         blockstack.Push(currentBlock);
-                        currentBlock = new ElseBlock(blockNumber);
-                        code.Write(Opcodes.els);
-                        code.Write(blockNumber);
-                        blockNumber++;
                     }
+
+                    currentBlock = new ElseBlock(blockNumber);
+                    code.Write(Opcodes.els);
+                    code.Write(blockNumber);
+                    blockNumber++;
                 }
                 else if (a == "endif")
                 {
-                    if (blockstack.Count == 0)
+                    code.Write(Opcodes.endif);
+                    currentBlock.endBlock = code.buffer.Count();
+                    blocks.Add(currentBlock);
+
+                    if (blockstack.Count > 0)
                     {
-                        code.Write(Opcodes.endif);
-                        currentBlock.endBlock = code.buffer.Count();
-                        blocks.Add(currentBlock);
-                        currentBlock = null;
-                    }
-                    else if (blockstack.Count > 0)
-                    {
-                        code.Write(Opcodes.endif);
-                        currentBlock.endBlock = code.buffer.Count();
-                        blocks.Add(currentBlock);
                         currentBlock = blockstack.Pop();
+                    }
+                    else
+                    {
+                        currentBlock = null;
                     }
                 }
                 else if (a.StartsWith("call "))

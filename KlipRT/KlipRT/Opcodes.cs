@@ -8,7 +8,7 @@ namespace KlipRT
 {
     class Opcodes
     {
-        public static readonly int pushInt32 = 0;
+        public static readonly int pushInt = 0;
         public static readonly int pushString = 1;
         public static readonly int pushVar = 2;
         public static readonly int print = 3;

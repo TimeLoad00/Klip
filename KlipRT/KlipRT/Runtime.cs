@@ -40,13 +40,13 @@ namespace KlipRT
             {
                 try
                 {
-                    opcode = code.ReadInt32();
+                    opcode = code.ReadInt();
                 }
                 catch { }
 
-                if (opcode == Opcodes.pushInt32)
+                if (opcode == Opcodes.pushInt)
                 {
-                    stack.Push(code.ReadInt32());
+                    stack.Push(code.ReadInt());
                 }
                 else if (opcode == Opcodes.pushString)
                 {
@@ -140,7 +140,7 @@ namespace KlipRT
                 }
                 else if (opcode == Opcodes.ife)
                 {
-                    int blockNumber = code.ReadInt32();
+                    int blockNumber = code.ReadInt();
                     IfBlock ifblock = GetIf(blockNumber);
 
                     object value1 = stack.Pop();
@@ -168,13 +168,13 @@ namespace KlipRT
                 }
                 else if (opcode == Opcodes.ifn)
                 {
-                    int blockNumber = code.ReadInt32();
+                    int blockNumber = code.ReadInt();
                     IfBlock ifblock = GetIf(blockNumber);
 
                     object value1 = stack.Pop();
                     object value2 = stack.Pop();
 
-                    if (IfNotEqual(value1, value2))
+                    if (!IfEqual(value1, value2))
                     {
                         if (currentBlock == null)
                         {
@@ -196,7 +196,7 @@ namespace KlipRT
                 }
                 else if (opcode == Opcodes.elseife)
                 {
-                    int blockNumber = code.ReadInt32();
+                    int blockNumber = code.ReadInt();
                     ElseIfBlock elseifblock = GetElseIf(blockNumber);
 
                     if (!ifWorked)
@@ -231,7 +231,7 @@ namespace KlipRT
                 }
                 else if (opcode == Opcodes.elseifn)
                 {
-                    int blockNumber = code.ReadInt32();
+                    int blockNumber = code.ReadInt();
                     ElseIfBlock elseifblock = GetElseIf(blockNumber);
 
                     if (!ifWorked)
@@ -239,7 +239,7 @@ namespace KlipRT
                         object value1 = stack.Pop();
                         object value2 = stack.Pop();
 
-                        if (IfNotEqual(value1, value2))
+                        if (!IfEqual(value1, value2))
                         {
                             if (currentBlock == null)
                             {
@@ -266,7 +266,7 @@ namespace KlipRT
                 }
                 else if (opcode == Opcodes.els)
                 {
-                    int blockNumber = code.ReadInt32();
+                    int blockNumber = code.ReadInt();
                     ElseBlock elseblock = GetElse(blockNumber);
 
                     if (!ifWorked)
@@ -298,7 +298,6 @@ namespace KlipRT
                         currentBlock = null;
                     }
                     DecVars();
-                    DestroyVars();
                 }
                 else if (opcode == Opcodes.call)
                 {
@@ -475,22 +474,6 @@ namespace KlipRT
             return ifequal;
         }
 
-        static bool IfNotEqual(object value1, object value2)
-        {
-            bool ifequal = false;
-
-            if ((value1 is int && value2 is int) && ((int)value1 != (int)value2))
-            {
-                ifequal = true;
-            }
-            else if ((value1 is string && value2 is string) && ((string)value1 != (string)value2))
-            {
-                ifequal = true;
-            }
-
-            return ifequal;
-        }
-
         static void IncVars()
         {
             foreach (Var v in vars)
@@ -503,17 +486,13 @@ namespace KlipRT
         {
             foreach (Var v in vars)
             {
-                v.scope--;
-            }
-        }
-
-        static void DestroyVars()
-        {
-            foreach (Var v in vars)
-            {
                 if (v.scope == 1)
                 {
                     vars.Remove(v);
+                }
+                else
+                {
+                    v.scope--;
                 }
             }
         }

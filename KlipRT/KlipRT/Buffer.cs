@@ -11,7 +11,7 @@ namespace KlipRT
         public List<object> buffer = new List<object>();
         public int pos = 0;
 
-        public int ReadInt32()
+        public int ReadInt()
         {
             int ret = (int)buffer[pos];
             pos++;
