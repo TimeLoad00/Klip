@@ -31,11 +31,11 @@ namespace KlipCompiler
                 }
                 catch { }
 
-                if (tok.TokenName.ToString() == "Import")
+                if (tok.TokenName == Lexer.Tokens.Import)
                 {
                     Program.imports.Add(ParseImport());
                 }
-                else if (tok.TokenName.ToString() == "Function")
+                else if (tok.TokenName == Lexer.Tokens.Function)
                 {
                     Func func = ParseFunc();
 
@@ -50,7 +50,7 @@ namespace KlipCompiler
                         currentBlock = func;
                     }
                 }
-                else if (tok.TokenName.ToString() == "If")
+                else if (tok.TokenName == Lexer.Tokens.If)
                 {
                     IfBlock ifblock = ParseIf();
 
@@ -60,7 +60,7 @@ namespace KlipCompiler
                         currentBlock = ifblock;
                     }
                 }
-                else if (tok.TokenName.ToString() == "ElseIf")
+                else if (tok.TokenName == Lexer.Tokens.ElseIf)
                 {
                     ElseIfBlock elseifblock = ParseElseIf();
 
@@ -70,7 +70,7 @@ namespace KlipCompiler
                         currentBlock = elseifblock;
                     }
                 }
-                else if (tok.TokenName.ToString() == "Else")
+                else if (tok.TokenName == Lexer.Tokens.Else)
                 {
                     if (currentBlock != null)
                     {
@@ -78,7 +78,7 @@ namespace KlipCompiler
                         currentBlock = new ElseBlock();
                     }
                 }
-                else if (tok.TokenName.ToString() == "Repeat")
+                else if (tok.TokenName == Lexer.Tokens.Repeat)
                 {
                     if (currentBlock != null)
                     {
@@ -86,27 +86,27 @@ namespace KlipCompiler
                         currentBlock = new RepeatBlock();
                     }
                 }
-                else if (tok.TokenName.ToString() == "Ident")
+                else if (tok.TokenName == Lexer.Tokens.Ident)
                 {
-                    if (tokens.Peek().TokenName.ToString() == "Equal")
+                    if (tokens.Peek().TokenName == Lexer.Tokens.Equal)
                     {
                         tokens.pos--;
                         Assign a = ParseAssign();
                         currentBlock.AddStmt(a);
                     }
-                    else if (tokens.Peek().TokenName.ToString() == "LeftParan")
+                    else if (tokens.Peek().TokenName == Lexer.Tokens.LeftParan)
                     {
                         tokens.pos--;
                         Call c = ParseCall();
                         currentBlock.AddStmt(c);
                     }
                 }
-                else if (tok.TokenName.ToString() == "Return")
+                else if (tok.TokenName == Lexer.Tokens.Return)
                 {
                     Return r = ParseReturn();
                     currentBlock.AddStmt(r);
                 }
-                else if (tok.TokenName.ToString() == "RightBrace")
+                else if (tok.TokenName == Lexer.Tokens.RightParan)
                 {
                     if (currentBlock is Func)
                     {
@@ -136,7 +136,7 @@ namespace KlipCompiler
                         }
                     }
                 }
-                else if (tok.TokenName.ToString() == "EOF")
+                else if (tok.TokenName == Lexer.Tokens.EOF)
                 {
                     tree.Add(currentBlock);
                     running = false;
@@ -149,7 +149,7 @@ namespace KlipCompiler
             string ret = "";
             Token t = tokens.GetToken();
 
-            if (t.TokenName.ToString() == "Ident")
+            if (t.TokenName == Lexer.Tokens.Ident)
             {
                 ret = t.TokenValue;
             }
@@ -162,17 +162,17 @@ namespace KlipCompiler
             string ident = "";
             List<string> vars = new List<string>();
 
-            if (tokens.Peek().TokenName.ToString() == "Ident")
+            if (tokens.Peek().TokenName == Lexer.Tokens.Ident)
             {
                 ident = tokens.GetToken().TokenValue.ToString();
             }
             
-            if (tokens.Peek().TokenName.ToString() == "LeftParan")
+            if (tokens.Peek().TokenName == Lexer.Tokens.LeftParan)
             {
                 tokens.pos++;
             }
 
-            if (tokens.Peek().TokenName.ToString() == "RightParan")
+            if (tokens.Peek().TokenName == Lexer.Tokens.RightParan)
             {
                 tokens.pos++;
             }
@@ -181,7 +181,7 @@ namespace KlipCompiler
                 vars = ParseFuncArgs();
             }
 
-            if (tokens.Peek().TokenName.ToString() == "LeftBrace")
+            if (tokens.Peek().TokenName == Lexer.Tokens.LeftBrace)
             {
                 tokens.pos++;
             }
@@ -194,19 +194,19 @@ namespace KlipCompiler
             IfBlock ret = null;
             Symbol op = 0;
 
-            if (tokens.Peek().TokenName.ToString() == "LeftParan")
+            if (tokens.Peek().TokenName == Lexer.Tokens.LeftParan)
             {
                 tokens.pos++;
             }
 
             Expr lexpr = ParseExpr();
 
-            if (tokens.Peek().TokenName.ToString() == "DoubleEqual")
+            if (tokens.Peek().TokenName == Lexer.Tokens.DoubleEqual)
             {
                 op = Symbol.doubleEqual;
                 tokens.pos++;
             }
-            else if (tokens.Peek().TokenName.ToString() == "NotEqual")
+            else if (tokens.Peek().TokenName == Lexer.Tokens.NotEqual)
             {
                 op = Symbol.notEqual;
                 tokens.pos++;
@@ -214,7 +214,7 @@ namespace KlipCompiler
 
             Expr rexpr = ParseExpr();
 
-            if (tokens.Peek().TokenName.ToString() == "RightParan")
+            if (tokens.Peek().TokenName == Lexer.Tokens.RightParan)
             {
                 tokens.pos++;
             }
@@ -229,19 +229,19 @@ namespace KlipCompiler
             ElseIfBlock ret = null;
             Symbol op = 0;
 
-            if (tokens.Peek().TokenName.ToString() == "LeftParan")
+            if (tokens.Peek().TokenName == Lexer.Tokens.LeftParan)
             {
                 tokens.pos++;
             }
 
             Expr lexpr = ParseExpr();
 
-            if (tokens.Peek().TokenName.ToString() == "DoubleEqual")
+            if (tokens.Peek().TokenName == Lexer.Tokens.DoubleEqual)
             {
                 op = Symbol.doubleEqual;
                 tokens.pos++;
             }
-            else if (tokens.Peek().TokenName.ToString() == "NotEqual")
+            else if (tokens.Peek().TokenName == Lexer.Tokens.NotEqual)
             {
                 op = Symbol.notEqual;
                 tokens.pos++;
@@ -249,7 +249,7 @@ namespace KlipCompiler
 
             Expr rexpr = ParseExpr();
 
-            if (tokens.Peek().TokenName.ToString() == "RightParan")
+            if (tokens.Peek().TokenName == Lexer.Tokens.RightParan)
             {
                 tokens.pos++;
             }
@@ -282,17 +282,17 @@ namespace KlipCompiler
             Token tok = tokens.GetToken();
             List<Expr> args = new List<Expr>();
 
-            if (tok.TokenName.ToString() == "Ident")
+            if (tok.TokenName == Lexer.Tokens.Ident)
             {
                 ident = tok.TokenValue.ToString();
             }
 
-            if (tokens.Peek().TokenName.ToString() == "LeftParan")
+            if (tokens.Peek().TokenName == Lexer.Tokens.LeftParan)
             {
                 tokens.pos++;
             }
 
-            if (tokens.Peek().TokenName.ToString() == "RightParan")
+            if (tokens.Peek().TokenName == Lexer.Tokens.RightParan)
             {
                 tokens.pos++;
             }
@@ -314,18 +314,18 @@ namespace KlipCompiler
             Expr ret = null;
             Token t = tokens.GetToken();
 
-            if (tokens.Peek().TokenName.ToString() == "LeftParan")
+            if (tokens.Peek().TokenName == Lexer.Tokens.LeftParan)
             {
                 string ident = "";
 
-                if (t.TokenName.ToString() == "Ident")
+                if (t.TokenName == Lexer.Tokens.Ident)
                 {
                     ident = t.TokenValue.ToString();
                 }
 
                 tokens.pos++;
 
-                if (tokens.Peek().TokenName.ToString() == "RightParan")
+                if (tokens.Peek().TokenName == Lexer.Tokens.RightParan)
                 {
                     ret = new CallExpr(ident, new List<Expr>());
                 }
@@ -334,53 +334,53 @@ namespace KlipCompiler
                     ret = new CallExpr(ident, ParseCallArgs());
                 }
             }
-            else if (t.TokenName.ToString() == "IntLiteral")
+            else if (t.TokenName == Lexer.Tokens.IntLiteral)
             {
                 IntLiteral i = new IntLiteral(Convert.ToInt32(t.TokenValue.ToString()));
                 ret = i;
             }
-            else if (t.TokenName.ToString() == "StringLiteral")
+            else if (t.TokenName == Lexer.Tokens.StringLiteral)
             {
                 StringLiteral s = new StringLiteral(t.TokenValue.ToString());
                 ret = s;
             }
-            else if (t.TokenName.ToString() == "Ident")
+            else if (t.TokenName == Lexer.Tokens.Ident)
             {
                 string ident = t.TokenValue.ToString();
 
                 Ident i = new Ident(ident);
                 ret = i;
             }
-            else if (t.TokenName.ToString() == "LeftParan")
+            else if (t.TokenName == Lexer.Tokens.LeftParan)
             {
                 Expr e = ParseExpr();
 
-                if (tokens.Peek().TokenName.ToString() == "RightParan")
+                if (tokens.Peek().TokenName == Lexer.Tokens.RightParan)
                 {
                     tokens.pos++;
                 }
 
                 ParanExpr p = new ParanExpr(e);
 
-                if (tokens.Peek().TokenName.ToString() == "Add")
+                if (tokens.Peek().TokenName == Lexer.Tokens.Add)
                 {
                     tokens.pos++;
                     Expr expr = ParseExpr();
                     ret = new MathExpr(p, Symbol.add, expr);
                 }
-                else if (tokens.Peek().TokenName.ToString() == "Sub")
+                else if (tokens.Peek().TokenName == Lexer.Tokens.Sub)
                 {
                     tokens.pos++;
                     Expr expr = ParseExpr();
                     ret = new MathExpr(p, Symbol.sub, expr);
                 }
-                else if (tokens.Peek().TokenName.ToString() == "Mul")
+                else if (tokens.Peek().TokenName == Lexer.Tokens.Mul)
                 {
                     tokens.pos++;
                     Expr expr = ParseExpr();
                     ret = new MathExpr(p, Symbol.mul, expr);
                 }
-                else if (tokens.Peek().TokenName.ToString() == "Div")
+                else if (tokens.Peek().TokenName == Lexer.Tokens.Div)
                 {
                     tokens.pos++;
                     Expr expr = ParseExpr();
@@ -392,24 +392,24 @@ namespace KlipCompiler
                 }
             }
 
-            if (tokens.Peek().TokenName.ToString() == "Add" || tokens.Peek().TokenName.ToString() == "Sub" || tokens.Peek().TokenName.ToString() == "Mul" || tokens.Peek().TokenName.ToString() == "Div")
+            if (tokens.Peek().TokenName == Lexer.Tokens.Add || tokens.Peek().TokenName == Lexer.Tokens.Sub || tokens.Peek().TokenName == Lexer.Tokens.Mul || tokens.Peek().TokenName == Lexer.Tokens.Div)
             {
                 Expr lexpr = ret;
                 Symbol op = 0;
 
-                if (tokens.Peek().TokenName.ToString() == "Add")
+                if (tokens.Peek().TokenName == Lexer.Tokens.Add)
                 {
                     op = Symbol.add;
                 }
-                else if (tokens.Peek().TokenName.ToString() == "Sub")
+                else if (tokens.Peek().TokenName == Lexer.Tokens.Sub)
                 {
                     op = Symbol.sub;
                 }
-                else if (tokens.Peek().TokenName.ToString() == "Mul")
+                else if (tokens.Peek().TokenName == Lexer.Tokens.Mul)
                 {
                     op = Symbol.mul;
                 }
-                else if (tokens.Peek().TokenName.ToString() == "Div")
+                else if (tokens.Peek().TokenName == Lexer.Tokens.Div)
                 {
                     op = Symbol.div;
                 }
@@ -432,16 +432,16 @@ namespace KlipCompiler
             {
                 Token tok = tokens.GetToken();
 
-                if (tok.TokenName.ToString() == "Ident")
+                if (tok.TokenName == Lexer.Tokens.Ident)
                 {
                     ret.Add(tok.TokenValue.ToString());
                 }
 
-                if (tokens.Peek().TokenName.ToString() == "Comma")
+                if (tokens.Peek().TokenName == Lexer.Tokens.Comma)
                 {
                     tokens.pos++;
                 }
-                else if (tokens.Peek().TokenName.ToString() == "RightParan")
+                else if (tokens.Peek().TokenName == Lexer.Tokens.RightParan)
                 {
                     tokens.pos++;
                     break;
@@ -459,11 +459,11 @@ namespace KlipCompiler
             {
                 ret.Add(ParseExpr());
 
-                if (tokens.Peek().TokenName.ToString() == "Comma")
+                if (tokens.Peek().TokenName == Lexer.Tokens.Comma)
                 {
                     tokens.pos++;
                 }
-                else if (tokens.Peek().TokenName.ToString() == "RightParan")
+                else if (tokens.Peek().TokenName == Lexer.Tokens.RightParan)
                 {
                     tokens.pos++;
                     break;
