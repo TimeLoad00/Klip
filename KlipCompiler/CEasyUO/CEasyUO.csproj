@@ -61,7 +61,9 @@
     <Compile Include="Core\ActionQueue.cs" />
     <Compile Include="Scripting\AST.cs" />
     <Compile Include="Scripting\EUOInterpreter.cs" />
+    <Compile Include="Scripting\EUOParser.cs" />
     <Compile Include="Scripting\Lexer.cs" />
+    <Compile Include="Scripting\ParseException.cs" />
     <Content Include="Core\Actions.cs">
       <SubType>Component</SubType>
     </Content>

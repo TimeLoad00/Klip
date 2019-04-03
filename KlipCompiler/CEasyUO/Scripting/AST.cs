@@ -4,9 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KlipCompiler
+namespace CEasyUO
 {
-    class Stmt { }
+    public class Stmt {
+        public int Line = 0;
+        public virtual bool Execute() {
+            return true;
+        }
+    }
 
     abstract class Expr
     {
@@ -14,7 +19,7 @@ namespace KlipCompiler
        
     }
 
-    class Block : Stmt
+    public class Block : Stmt
     {
         public List<Stmt> statements;
 
@@ -27,8 +32,87 @@ namespace KlipCompiler
         {
             statements.Add(stmt);
         }
+
+        public override bool Execute()
+        {
+            
+            return base.Execute();
+        }
+    }
+    class FindItemStmt : Stmt
+    {
+        public List<uint> FindIDs = new List<uint>();
+        public List<ushort> FindTypes = new List<ushort>();
+        public int Index;
+        public bool GroundOnly = false;
+        public bool ContainerOnly = false;
+        public uint ContainerSerial;
+
+        private Expr Filter;
+        private Expr Find;
+
+        public FindItemStmt( Expr idType, IntLiteral index, Expr filter )
+        {
+            Find = idType;
+          
+            if(index != null)
+                Index = index.value;
+            Filter = filter;
+        }
+        public override bool Execute()
+        {
+            var ids = Find.GetValue().ToString().Split( new[] { '_' } );
+            foreach ( var id in ids )
+            {
+                if ( id.Length == 3 )
+                    FindTypes.Add( Form1.EUO2StealthType( id ) );
+                else
+                    FindTypes.Add( Form1.EUO2StealthType( id ) );
+            }
+            if ( Filter != null )
+            {
+                var str = Filter.GetValue().ToString().Trim();
+                ContainerOnly = ( str.Contains( "C" ) );
+                GroundOnly = ( str.Contains( "G" ) );
+                try
+                {
+                    var id = str.Split( '_' )[1];
+                    ContainerSerial = Form1.EUO2StealthID( id );
+                }
+                catch { }
+            }
+
+            return base.Execute();
+        }
+    }
+    class EventStmt : Stmt
+    {
+        public string EventType;
+        public List<Expr> Params;
+        public EventStmt( string eventType, List<Expr> paras )
+        {
+            EventType = eventType;
+            Params = paras;
+        }
     }
 
+    class Goto : Stmt
+    {
+        public string Name;
+        public Goto( string name )
+        {
+            Name = name;
+        }
+    }
+
+    class Label : Stmt
+    {
+        public string Name;
+        public Label(string name)
+        {
+            Name = name;
+        }
+    }
     class Func : Block
     {
         public string ident;
@@ -41,17 +125,41 @@ namespace KlipCompiler
         }
     }
 
+    class ForBlock : Block
+    {
+        public Expr From;
+        public Ident Var;
+        public Expr To;
+
+
+        public ForBlock( Ident var, Expr from, Expr to )
+        {
+            From = from;
+            Var = var;
+            To = to;
+        }
+        public override bool Execute()
+        {
+            return base.Execute();
+        }
+    }
+
     class IfBlock : Block
     {
         public Expr leftExpr;
-        public Symbol op;
+        public Lexer.Tokens op;
         public Expr rightExpr;
+        
 
-        public IfBlock(Expr lexpr, Symbol o, Expr rexpr)
+        public IfBlock(Expr lexpr, Lexer.Tokens o, Expr rexpr)
         {
             leftExpr = lexpr;
             op = o;
             rightExpr = rexpr;
+        }
+        public override bool Execute()
+        {
+            return base.Execute();
         }
     }
 
@@ -77,13 +185,28 @@ namespace KlipCompiler
 
     class Assign : Stmt
     {
-        public string ident;
+        public Expr ident;
         public Expr value;
 
-        public Assign(string i, Expr v)
+        public Assign( Expr i, Expr v)
         {
             ident = i;
             value = v;
+        }
+        public override bool Execute()
+        {
+            string varName = "";
+            if ( ident is Ident i )
+            {
+                varName = i.value.ToLowerInvariant();
+                EUOInterpreter.Setvariable( varName, value );
+            }
+            else
+            {
+                varName = ident.GetValue().ToString().ToLowerInvariant();
+                EUOInterpreter.Setvariable( varName, value );
+            }
+            return base.Execute();
         }
     }
 
@@ -149,7 +272,7 @@ namespace KlipCompiler
 
         public override object GetValue()
         {
-            return EUOParser.Variables[value.ToLowerInvariant()];
+            return EUOInterpreter.GetVariable<string>(value.ToLowerInvariant());
         }
     }
 

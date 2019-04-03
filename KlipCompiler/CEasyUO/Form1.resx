@@ -118,86 +118,502 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="txtScriptEntry.Text" xml:space="preserve">
-    <value>; Make sure you have bandages in your backpack
-; Need water trough on ground within 1 tile to clean bandages
-
-set %petOne NTBI          ; Has to be named "One"
-set %petTwo YFII          ; Has to be named "Two"
-set %petThree YWHI        ; Has to be named "Three"
-
-set %waterTrough VEE_QEE
-set %bloodyBandages AMF
-set %bandages ZLF
-
-ignoreItem reset
-
-set %attackTimer #scnt
-
-loop:
-if ( %attackTimer &lt;= #scnt )
+    <value>; Configuration
+if ( #charName = Night )
 {
-    gosub attack One %petTwo
-    gosub attack Two %petThree
-    gosub attack Three %petOne
-    set %attackTimer #scnt + 3
+    set %runebookId TJQDKMD          ; Runebook ID
+    set %dropContainerId XWNAKMD
+    set %lumberjackSpots 8           ; Number of spots in runebook
 }
-gosub cleanBandages
-gosub heal %petOne
-gosub heal %petTwo
-gosub heal %petThree
-goto loop
+if ( #charName = Dragono )
+{
+    set %runebookId TSNFKMD          ; Runebook ID
+    set %dropContainerId BCCWJMD
+    set %lumberjackSpots 6           ; Number of spots in runebook
+}
+set %area 40                     ; Area to scan
+set %pathfindTimeout 10          ; Maximum time allowed per pathfind (seconds)
+set %maximumPathfindDistance 17  ; Maximum distance to pathFind
+set %smartPathFindTimeout 60     ; Maximum time allowed per smart pathfind (seconds)
+set %rechargeRunebook #true      ; Recharge runebook (#true/#false)
+set %maxRunebookCharges 10       ; Maximum charges in runebook
+set %toolsToCraft 10             ; When out of hatchets, amount to craft
+set %toolsRecharge 5             ; Amount of tools to have before going back lumberjacking (1 if you got newbied hatchet)
+set %deathTime 2400              ; Time to wait before resurrecting (20 = 1 second)
 
-sub cleanBandages
-findItem %bloodyBandages C_ , #backPackId
-if ( #findKind = -1 )
-    return
-set #lObjectId #findId
-findItem %waterTrough G_2
-if ( #findKind = -1 )
-    return
-set #lTargetId #findId
-set #lTargetKind 1
-event macro 17
-target 6s
-event macro 22
+; Constants
+set %tools FSF_ASF
+set %tinkeringTools GTL
+set %recallScrolls WTL
+set %treasureBalls DMF
+
+; Stats
+set %recallScrollsUsed 0
+set %toolsUsed 0
+
+; Variables
+set %currentLumberjackSpot 1
+set %ironRequiredTool 4
+set %bankingRequired #false
+
+tile init
+
+lumberjacking:
+set %bankingRequired #false
+gosub resetSpots
+for %currentSpot 1 %spots
+{
+    set %spotX %spotX . %currentSpot
+    set %spotY %spotY . %currentSpot
+    set %spotZ %spotZ . %currentSpot
+    set %spotTileType %spotTileType . %currentSpot
+    
+    gosub smartPathFind %spotX %spotY %spotZ 1
+    gosub lumberjack %spotX %spotY %spotZ %spotTileType
+    
+    if ( #charGhost = yes )
+    {
+        gosub resurrect
+        break
+    }
+    
+    if ( %bankingRequired = #true )
+        break
+}
+set %currentLumberjackSpot %currentLumberjackSpot + 1
+if ( %currentLumberjackSpot &gt; %lumberjackSpots )
+    set %currentLumberjackSpot 1
+gosub bank
+goto lumberjacking
+
+sub resetSpots
+linesPerCycle 1000
+set %_startX #charPosX - %area
+set %_endX #charPosX + %area
+set %_startY #charPosY - %area
+set %_endY #charPosY + %area
+set %spots 0
+for %_resetSpotsLoopX %_startX %_endX
+{
+    for %_resetSpotsLoopY %_startY %_endY
+    {
+        tile cnt %_resetSpotsLoopX %_resetSpotsLoopY
+        
+        for %_resetSpotsLoopTile 1 #tileCnt
+        {
+            tile get %_resetSpotsLoopX %_resetSpotsLoopY %_resetSpotsLoopTile
+            
+            if ( #tiletype &gt;= 3277 &amp;&amp; #tiletype &lt;= 3302 )
+            {
+                set %spots %spots + 1
+                set %spotX . %spots %_resetSpotsLoopX
+                set %spotY . %spots %_resetSpotsLoopY
+                set %spotZ . %spots #tileZ
+                set %spotTileType . %spots #tileType
+                break
+            }
+        }
+    }
+}
+linesPerCycle 10
 return
 
-sub attack
-set %_attackName %1
-set %_attackId %2
-set #lTargetId %_attackId
-set #lTargetKind 1
-msg $ , %_attackName kill$
-target 6s
+; gosub smartPathFind [x] [y] [z] [tolerance]
+sub smartPathFind
+linesPerCycle 1000
+set %_smartPathFindX %1
+set %_smartPathFindY %2
+set %_smartPathFindZ %3
+set %_smartPathFindTolerance %4
+set %_smartPathFindTimeout #scnt + %smartPathFindTimeout
+gosub isCharPosWithinTolerance %_smartPathFindX %_smartPathFindY %maximumPathfindDistance
+while ( #result = #false )
+{
+    if ( %_smartPathFindTimeout &lt; #scnt )
+        break
+
+    set %_bestCandidateX #charPosX
+    set %_bestCandidateY #charPosY
+    set %_bestCandidateZ #charPosZ
+
+    for %_candidate 1 %spots
+    {
+        set %_candidateX %spotX . %_candidate
+        set %_candidateY %spotY . %_candidate
+        set %_candidateZ %spotZ . %_candidate
+
+        gosub isBetterSmartPathFindCandidate %_candidateX %_candidateY %_smartPathFindX %_smartPathFindY %_bestCandidateX %_bestCandidateY %maximumPathfindDistance
+        if ( #result = #true )
+        {
+            set %_bestCandidateX %_candidateX
+            set %_bestCandidateY %_candidateY
+            set %_bestCandidateZ %_candidateZ
+        }
+    }
+
+    if ( %_bestCandidateX = #charPosX &amp;&amp; %_bestCandidateY = #charPosY )
+        goto _smartPathFindReturnFalse ; no candidate found
+
+    gosub pathFind %_bestCandidateX %_bestCandidateY %_bestCandidateZ %_smartPathFindTolerance
+    if ( #result = #false )
+        goto _smartPathFindReturnFalse
+    gosub isCharPosWithinTolerance %_smartPathFindX %_smartPathFindY %maximumPathfindDistance
+}
+linesPerCycle 10
+gosub pathFind %_smartPathFindX %_smartPathFindY %_smartPathFindZ %_smartPathFindTolerance %_smartPathFindTimeout
+return #result
+_smartPathFindReturnFalse:
+linesPerCycle 10
+return #false
+
+; gosub isBetterSmartPathFindCandidate candidateX candidateY destinationX destinationY bestCandidateX bestCandidateY maxDistance
+sub isBetterSmartPathFindCandidate
+set %_distanceToCandidateX #charPosX - %1 abs
+set %_distanceToCandidateY #charPosY - %2 abs
+
+if ( %_distanceToCandidateX &gt; %7 || %_distanceToCandidateY &gt; %7 )
+    return #false ; Candidate is out of reach
+
+set %_distanceCandidateToDestinationX %1 - %3 abs
+set %_distanceCandidateToDestinationY %2 - %4 abs
+set %_distanceCandidateToDestination %_distanceCandidateToDestinationX + %_distanceCandidateToDestinationY
+
+set %_distanceBestCandidateToDestinationX %5 - %3 abs
+set %_distanceBestCandidateToDestinationY %6 - %4 abs
+set %_distanceBestCandidateToDestination %_distanceBestCandidateToDestinationX + %_distanceBestCandidateToDestinationY
+
+if ( %_distanceCandidateToDestination &lt; %_distanceBestCandidateToDestination )
+    return #true ; Candidate is in reach and nearer to wanted destination
+
+return #false ; Candidate is in reach, but farer to wanted destination
+
+; gosub pathfind [x] [y] [z] [tolerance]
+sub pathfind
+set %_pathFindX %1
+set %_pathFindY %2
+set %_pathFindZ %3
+set %_pathFindTolerance %4
+set %_pathfindMoved #false
+set %_timeout #scnt + %pathfindTimeout
+set %_journal #jIndex + 1
+gosub isCharPosWithinTolerance %_pathFindX %_pathFindY %_pathFindTolerance
+if ( #result = #true )
+{
+    if ( %_pathfindMoved = #true )
+        event pathfind 0 0 0
+    return #true
+}
+event pathfind %_pathFindX %_pathFindY %_pathFindZ
+_pathfind:
+gosub isCharPosWithinTolerance %_pathFindX %_pathFindY %_pathFindTolerance
+if ( #result = #true )
+{
+    if ( %_pathfindMoved = #true )
+        event pathfind 0 0 0
+    return #true
+}
+if ( %_timeout &lt; #scnt )
+{
+    if ( %_pathfindMoved = #true )
+        event pathfind 0 0 0
+    return #false
+}
+if ( %_journal &lt;= #jIndex )
+{
+    scanJournal %_journal
+    if ( get_there in #journal )
+        return #false
+    if ( pathfinding in #journal )
+        set %_pathfindMoved #true
+    set %_journal %_journal + 1
+}
+goto _pathfind
+
+sub isCharPosWithinTolerance
+set %_x %1
+set %_y %2
+set %_dist %3
+set %_distX #charPosX - %_x abs
+set %_distY #charPosY - %_y abs
+if ( %_distX &lt;= %_dist &amp;&amp; %_distY &lt;= %_dist )
+    return #true
+return #false
+
+sub lumberjack
+set %_lumberjackX %1
+set %_lumberjackY %2
+set %_lumberjackZ %3
+set %_lumberjackTileType %4
+_lumberjack:
+findItem %tools C_
+if ( #findKind = -1 )
+{
+    set %bankingRequired #true
+    return
+}
+set #lObjectId #findId
+set #lTargetX %_lumberjackX
+set #lTargetY %_lumberjackY
+set #lTargetZ %_lumberjackZ
+set #lTargetTile %_lumberjackTileType
+set #lTargetKind 3
+set %_lumberjackJournal #jIndex
+event macro 17
+target
 event macro 22
+set %_lumberjackTimeout #scnt + 10
+_lumberjackJournal:
+if ( %_lumberjackTimeout &lt; #scnt )
+    return
+if ( #jIndex &lt;= %_journal )
+    goto _lumberjackJournal
+set %_journal %_journal + 1
+scanJournal %_journal
+if ( you_hack_at_the_tree in #journal )
+    goto _lumberjack
+if ( you_put in #journal )
+    goto _lumberjack
+if ( there_is_nothing in #journal )
+    return
+if ( it_appears_immune in #journal )
+    return
+if ( reach_this in #journal )
+    return
+goto _lumberjackJournal
+
+sub bank
+gosub recall 1
+gosub dropLogs
+gosub dropTreasureBalls
+gosub restockTools
+if ( %rechargeRunebook = #true )
+    gosub rechargeRunebook
+set %_currentLumberjackSpot %currentLumberjackSpot + 1
+gosub recall %_currentLumberjackSpot
 return
 
-sub heal
-set %_healId %1
-_heal:
-findItem ZLF C_ , #backPackId
+sub restockTools
+ignoreItem reset
+_restockTools:
+findItem %tools C_ , #backPackId
+if ( #findCnt &gt;= %toolsRecharge )
+    return
+set %toolsToGrab %toolsRecharge - #findCnt
+gosub openContainer %dropContainerId
+findItem %tools C_ , %dropContainerId
+if ( #findCnt &lt; %toolsToGrab )
+{
+    gosub craftTools
+    gosub dropLogs ; safety
+    goto _restockTools
+}
+for %_loop 1 %toolsToGrab
+{
+    findItem %tools C_ , %dropContainerId
+    exevent drag #findId
+    exevent dropC #backPackId
+    wait 10
+}
+set %toolsUsed %toolsUsed + %toolsToGrab
+return
+
+sub craftTools
+ignoreItem reset
+findItem %tinkeringTools C_ , %dropContainerId
+if ( #findKind = -1 )
+    pause
+exevent drag #findId 1
+exevent dropC #backPackId
+wait 10
+_findIronIngots:
+findItem RMK C_ , %dropContainerId
+if ( #findKind = -1 )
+    pause
+if ( #findCol &lt;&gt; 0 )
+{
+    ignoreItem #findId
+    goto _findIronIngots
+}
+set %_ironAmount %ironRequiredTool * %toolsToCraft
+exevent drag #findId %_ironAmount
+exevent dropC #backPackId
+wait 10
+ignoreItem reset
+_craftTool:
+findItem RMK C_ , #backPackId
+if ( #findCol &lt;&gt; 0 )
+{
+    ignoreItem #findId
+    goto _craftTool
+}
+if ( #findKind = -1 || #findStack &lt; %ironRequiredTool )
+    goto _dropTinkeringTools
+msg $,waitmenu 'Tinkering' 'Tools' 'Tools' 'hatchet'$
+findItem %tinkeringTools C_ , #backPackId
 set #lObjectId #findId
-set #lTargetId %_healId
-set #lTargetKind 1
 event macro 17
-target 6s
-set %_healJournal #jIndex + 1
-set %_healTimeout #scnt + 3
-event macro 22
-_healJournal:
-if ( %_healTimeout &lt; #scnt )
+wait 80
+goto _craftTool
+_dropTinkeringTools:
+ignoreItem reset
+findItem %tinkeringTools C_ , #backPackId
+exevent drag #findId 1
+exevent dropC %dropContainerId
+wait 10
+_dropTools:
+findItem %tools C_ , #backPackId
+if ( #findKind = -1 )
     return
-if ( %_healJournal &gt; #jIndex  )
-    goto _healJournal
-scanJournal %_healJournal
-if ( it_is_not_wounded in #journal )
+exevent drag #findId 1
+exevent dropC %dropContainerId 50 50
+wait 10
+goto _dropTools
+
+; gosub recall [rune]
+sub recall
+set %_rune %1
+if ( %_rune &lt;= 8 )
+{
+    set %_runeX 85
+    set %_runeY 115 + ( ( %_rune - 1 ) * 14 )
+}
+else
+{
+    set %_runeX 245
+    set %_runeY 115 + ( ( %_rune - 9 ) * 14 )
+}
+set %_charPosX #charPosX
+set %_charPosY #charPosY
+_openRunebook:
+set %_openRunebook #scnt + 10
+set #lObjectId %runebookId
+event macro 17
+_waitOpenRunebook:
+if ( %_openRunebook &lt; #scnt )
+   goto _openRunebook
+if ( #contSizeX &lt;&gt; 352 || #contSizeY &lt;&gt; 226 )
+   goto _waitOpenRunebook
+set %_recall #scnt + 10
+click %_runeX %_runeY
+_waitRecall:
+if ( %_recall &lt; #scnt )
+    goto _openRunebook
+if ( #charPosX &lt;&gt; %_charPosX || #charPosY &lt;&gt; %_charPosY )
     return
-if ( you_finish_applying_bandages in #journal )
+goto _waitRecall
+
+sub rechargeRunebook
+ignoreItem reset
+gosub openContainer %dropContainerId
+_rechargeRunebook:
+findItem %recallScrolls C_ , %dropContainerId
+if ( #findKind = -1 )
+    pause ; Out of recall scrolls
+if ( #findCol &lt;&gt; 0 )
+{
+    ignoreItem #findId
+    goto rechargeRunebook
+}
+exevent drag #findId %maxRunebookCharges
+exevent dropC %runebookId
+wait 10
+findItem %recallScrolls C_ , #backPackId
+set %recallScrollsUsed %recallScrollsUsed + ( %maxRunebookCharges - #findStack )
+exevent drag #findId #findStack
+exevent dropC %dropContainerId
+wait 10
+return
+
+; gosub openContainer [containerId]
+sub openContainer
+set %_containerId %1
+_openContainer:
+set #lObjectId %_containerId
+event macro 17
+set %_timeout #scnt + 10
+_waitOpenContainer:
+if ( %_timeout &lt; #scnt )
+    goto _openContainer
+if ( #contId = %_containerId )
+   return
+goto _openContainer
+
+sub dropLogs
+ignoreItem reset
+_dropLogs:
+findItem ZLK_RMK C_ , #backPackId
+if ( #findKind = -1 )
     return
-if ( you_fail_to_apply in #journal )
-    goto _heal
-set %_healJournal %_healJournal + 1
-goto _healJournal
+exevent drag #findId #findStack
+exevent dropC %dropContainerId
+wait 10
+goto _dropLogs
+
+sub dropTreasureBalls
+ignoreItem reset
+_dropTreasureBalls:
+findItem %treasureBalls C_ , #backPackId
+if ( #findKind = -1 )
+    return
+exevent drag #findId 1
+exevent dropC %dropContainerId
+wait 10
+goto _dropTreasureBalls
+
+sub resurrect
+set %_resurrectX #charPosX
+set %_resurrectY #charPosY
+_resurrect:
+if ( #charGhost &lt;&gt; yes )
+    return
+msg $home home home$
+wait 10
+if ( #charPosX = %_resurrectX || #charPosY = %_resurrectY )
+    goto _resurrect
+wait %deathTime
+gosub pathfind 5182 1250 0 1
+gosub pathfind 5182 1237 0 1
+gosub pathfind 5182 1228 10 0
+gosub pathfind 5182 1223 40 1
+move 5182 1223 1 30s
+ignoreItem reset
+_clickResurrectionStone:
+findItem HTG G_1
+if ( #findKind = -1 )
+    pause
+if ( #findCol &lt;&gt; 66 )
+{
+    ignoreItem #findId
+    goto _clickResurrectionStone
+}
+ignoreItem reset
+set #lObjectId #findId
+event macro 17
+gosub waitGump 380 150
+if ( #result = #false )
+    goto _clickResurrectionStone
+click 72 100
+wait 120
+if ( #charGhost = yes )
+    goto _clickResurrectionStone
+event macro 8 1 ; open paperdoll
+event macro 8 2 ; open status
+event macro 8 7 ; open backpack
+wait 20
+move 5194 1229 0 10s
+return
+
+; gosub waitGump width height
+sub waitGump
+set %_waitGumpWidth %1
+set %_waitGumpHeight %2
+set %_waitGumpTimeout #scnt + 5
+_waitGump:
+if ( %_waitGumpTimeout &lt; #scnt )
+    return #false
+if ( #contSizeX = %_waitGumpWidth &amp;&amp; #contSizeY = %_waitGumpHeight )
+    return #true
+goto _waitGump
 </value>
   </data>
   <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

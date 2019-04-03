@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace KlipCompiler
+namespace CEasyUO
 {
     public class Lexer
     {
@@ -63,7 +63,12 @@ namespace KlipCompiler
             Dollar,
             Less,
             More,
-            For
+            For,
+            And,
+            Or,
+            GlobalIdent,
+            UnderScore,
+            Colon
         }
 
         public string InputString
@@ -83,36 +88,36 @@ namespace KlipCompiler
             _inputString = string.Empty;
 
 
-            _tokens.Add( Tokens.Set, "set" );
+            _tokens.Add( Tokens.Set, "set " );
             _tokens.Add( Tokens.Event, "event " );
-            _tokens.Add( Tokens.Goto, "goto" );
-            _tokens.Add( Tokens.Call, "gosub" );
+            _tokens.Add( Tokens.Goto, "goto " );
+            _tokens.Add( Tokens.Call, "gosub " );
             _tokens.Add( Tokens.Function, "sub " );
-            _tokens.Add( Tokens.FindItem, "finditem" );
-            _tokens.Add( Tokens.Msg, "msg" );
+            _tokens.Add( Tokens.FindItem, "finditem " );
+            _tokens.Add( Tokens.Msg, "msg " );
 
 
-            _tokens.Add( Tokens.Target, "target" );
-            _tokens.Add( Tokens.Wait, "wait" );
-            _tokens.Add( Tokens.IgnoreItem, "ignoreitem" );
+            _tokens.Add( Tokens.Target, "target " );
+            _tokens.Add( Tokens.Wait, "wait " );
+            _tokens.Add( Tokens.IgnoreItem, "ignoreitem " );
             //_tokens.Add(Tokens.Fu, "import");
-            _tokens.Add(Tokens.For, "for");
-            _tokens.Add( Tokens.If, "if" );
+            _tokens.Add(Tokens.For, "for ");
+            _tokens.Add( Tokens.If, "if " );
             _tokens.Add( Tokens.ElseIf, "elseif" );
             _tokens.Add( Tokens.Else, "else" );
             _tokens.Add( Tokens.Repeat, "repeat" );
             _tokens.Add( Tokens.Return, "return" );
-            _tokens.Add( Tokens.IntLiteral, "[0-9][0-9]*" );
+            _tokens.Add( Tokens.IntLiteral, "[\\-0-9][0-9]*" );
 
             _tokens.Add( Tokens.Label, "[a-zA-Z_][a-zA-Z0-9_]*?:" );
             _tokens.Add( Tokens.Comment, ";[^\n\r]*" );
-
+            _tokens.Add( Tokens.GlobalIdent, "![a-zA-Z0-9_]*" );
             _tokens.Add( Tokens.Ident, "%[a-zA-Z0-9_]*" );
-            _tokens.Add( Tokens.BuildInIdent, "#[a-zA-Z_][a-zA-Z0-9_]*" );
-            _tokens.Add( Tokens.StringLiteral, "[a-zA-Z_][a-zA-Z0-9_]*" );
-
+            _tokens.Add( Tokens.BuildInIdent, "#[a-zA-Z0-9_]*" );
+            _tokens.Add( Tokens.StringLiteral, "[a-zA-Z_,'][a-zA-Z0-9_,']*" );
             _tokens.Add( Tokens.Whitespace, "[ \\t]+" );
             _tokens.Add( Tokens.NewLine, "\\r\\n" );
+            _tokens.Add( Tokens.UnderScore, "_" );
             _tokens.Add( Tokens.Add, "\\+" );
             _tokens.Add( Tokens.Sub, "\\-" );
             _tokens.Add( Tokens.Mul, "\\*" );
@@ -120,11 +125,12 @@ namespace KlipCompiler
             _tokens.Add( Tokens.NotEqual, "\\<>" );
             _tokens.Add( Tokens.LessOrEqual, "\\<=" );
             _tokens.Add( Tokens.MoreOrEqual, "\\>=" );
-            _tokens.Add( Tokens.LessOrEqual2, "\\=<" );
-            _tokens.Add( Tokens.MoreOrEqual2, "\\=>" );
+            _tokens.Add( Tokens.LessOrEqual2, "=\\<" );
+            _tokens.Add( Tokens.MoreOrEqual2, "=\\>" );
             _tokens.Add( Tokens.Less, "\\<" );
             _tokens.Add( Tokens.More, "\\>" );
-
+            _tokens.Add( Tokens.And, "\\&\\&" );
+            _tokens.Add( Tokens.Or, "\\|\\|" );
             _tokens.Add( Tokens.Equal, "\\=" );
             _tokens.Add( Tokens.LeftParan, "\\(" );
             _tokens.Add( Tokens.RightParan, "\\)" );
@@ -133,6 +139,7 @@ namespace KlipCompiler
             _tokens.Add( Tokens.Comma, "\\," );
             _tokens.Add( Tokens.Period, "\\." );
             _tokens.Add( Tokens.Dollar, "\\$" );
+            _tokens.Add( Tokens.Colon, "\\:" );
         }
 
         private void PrepareRegex()
@@ -173,7 +180,7 @@ namespace KlipCompiler
                 }
             }
             _index++;
-            return new Token( Tokens.Undefined, string.Empty );
+            return new Token( Tokens.Undefined, _inputString.Substring(_index-1,50) );
         }
 
         public PeekToken Peek()

@@ -5,91 +5,40 @@ using System.Collections.Generic;
 using System.Threading;
 
 
-namespace KlipCompiler
+namespace CEasyUO
 {
-    public class EUOParser
+    public class EUOInterpreter
     {
-        private List<Token> m_Tokens;
-        private int CurrentIndex = 0;
-        public int CurrentLine => m_Tokens != null ? CurrentToken.Line : 0;
-
-        private Token CurrentToken => m_Tokens != null ? m_Tokens[CurrentIndex] : null;
-        private Token NextToken => m_Tokens[CurrentIndex + 1];
-        private Token LastToken => m_Tokens[CurrentIndex - 1];
-
-        public string Script { get; internal set; }
+        private List<Stmt> m_Statements = new List<Stmt>();
+        private Stmt CurrentStatment;
 
         private Dictionary<string,int> Labels = new Dictionary<string, int>();
         private Dictionary<string, int> Subs = new Dictionary<string, int>();
 
         public static Dictionary<string,object> Variables = new Dictionary<string, object>();
-        public EUOParser(string script )
+        public EUOInterpreter( string script )
         {
-            Script = script;
-            Lexer lexer = new KlipCompiler.Lexer() { InputString = script };
-
-            List<Token> tokens = new List<Token>();
-            int line = 0;
-            int tok = 0;
-            while ( true )
-            {
-
-                Token t = lexer.GetToken();
-                if ( t == null )
-                {
-                    break;
-                }
-                if ( t.TokenName == Lexer.Tokens.NewLine )
-                    line++;
-                t.Line = line;
-                if ( t.TokenName.ToString() == "Undefined" )
-                {
-                    throw new Exception( $"Undefined token: {t.TokenValue} " );
-                }
-                if ( t.TokenName.ToString() != "Whitespace" && t.TokenName.ToString() != "Undefined" )
-                {
-                    tokens.Add( t );
-                }
-                if(t.TokenName == Lexer.Tokens.Label)
-                {
-                    Labels.Add( t.TokenValue.TrimEnd( new[]{':'} ).ToLowerInvariant(), tok + 1 );
-                }
-                if ( t.TokenName == Lexer.Tokens.Function )
-                {
-                    Subs.Add( t.TokenValue.TrimEnd( new[] { ':' } ).ToLowerInvariant(), tok + 1 );
-                }
-                tok++;
-            }
-            m_Tokens = tokens;
-            if ( m_Tokens == null )
-                throw new Exception( "Parse Error" );
-           // Player = PlayerMobile.GetPlayer();
+            var parser = new EUOParser( script );
+            m_Statements = parser.GenerateAST();
         }
+
+    
 
         public void Run()
         {
-            while (CurrentIndex != m_Tokens.Count - 1)
+            for( int i = 0;i < m_Statements.Count; )
             {
-                if ( !Line() )
-                    break;
-              
-                
+                //if ( Step( m_Statements[i] ) )
+               //     i++;
             }
+          
             //throw new NotImplementedException();
         }
-        public bool Line()
-        {
-            while ( CurrentToken.TokenName != Lexer.Tokens.NewLine )
-                Step();
-            if ( NextToken == null )
-                return false;
-            CurrentIndex++;
-            return true;
-        }
+       
 
-        public void Step()
+        internal void Step(Stmt st)
         {
-            switch ( CurrentToken.TokenName )
+           /* switch ( CurrentToken.TokenName )
             {
                 case Lexer.Tokens.Function:
                     //skip to end return;
@@ -166,7 +115,7 @@ namespace KlipCompiler
                     Console.WriteLine( "Unhandled Token: " + CurrentToken.TokenName );
                     break;
             }
-            CurrentIndex++;
+            CurrentIndex++;*/
         }
 
         private void ParseFor()
@@ -174,95 +123,11 @@ namespace KlipCompiler
             throw new NotImplementedException();
         }
 
-        private void ParseFindItem()
-        {
-            CurrentIndex++;
-            if(CurrentToken.TokenName != Lexer.Tokens.StringLiteral)
-            {
-                throw new Exception();
-            }
-            var ids = CurrentToken.TokenValue.Split( '_' );
-            CurrentIndex++;
-            uint container = 0;
-            bool ground = false;
-            if( CurrentToken.TokenName == Lexer.Tokens.StringLiteral ) {
-                if ( CurrentToken.TokenValue.ToLower() == "g" || CurrentToken.TokenValue.ToLower() == "g_" )
-                    ground = true;
-                else if( CurrentToken.TokenValue.ToLower() == "c_" )
-                {
-                    CurrentIndex++;
-                    if(CurrentToken.TokenName == Lexer.Tokens.Comma )
-                    {
-                        CurrentIndex++;
-                        if ( CurrentToken.TokenName == Lexer.Tokens.StringLiteral )
-                        {
-                            container = Form1.EUO2StealthID( CurrentToken.TokenValue );  
-                        }
-
-                    }
-
-                }
-            }
-           foreach(var idStr in ids )
-            {
-                if ( idStr.Length == 3 )
-                {
-                    var id = Form1.EUO2StealthType( idStr );
-                    foreach ( var i in World.Items.Values )
-                    {
-                        if(i.ItemID == id && ((container != 0 && i.ContainerID == container ) || (ground && i.ContainerID == 0)) )
-                        {
-                            Setvariable( "#findid", Form1.uintToEUO(i.Serial.Value) );
-                            Setvariable( "#findtype", Form1.uintToEUO( i.ItemID.Value ) );
-
-                            Setvariable( "#findx", i.Position.X );
-                            Setvariable( "#findy", i.Position.Y );
-                            Setvariable( "#findz", i.Position.Z );
-
-                        }
-                    }
-                    foreach ( var i in World.Mobiles.Values )
-                    {
-                        if ( i.Body == id )
-                        {
-                            Setvariable( "#findid", Form1.uintToEUO( i.Serial.Value ) );
-                            Setvariable( "#findtype", Form1.uintToEUO( i.Body ) );
-
-                            Setvariable( "#findx", i.Position.X );
-                            Setvariable( "#findy", i.Position.Y );
-                            Setvariable( "#findz", i.Position.Z );
-
-                        }
-                    }
-                }
-                else
-                {
-                    var id = Form1.EUO2StealthID( idStr );
-                    if ( World.Items.ContainsKey( id ) )
-                    {
-                        Setvariable( "#findid", id );
-                    }
-                    else if ( World.Mobiles.ContainsKey( id ) )
-                    {
-
-                    }
-                }
-               
-            }
-        }
-        private void ParseElse()
-        {
-            CurrentIndex++;
-            (var startIndex, var EndIndex) = parseBlock();
-            if ( IfStack.Pop() )
-                CurrentIndex = EndIndex;
-            else
-                CurrentIndex = startIndex;
-        }
+      
 
         private Stack<bool> IfStack = new Stack<bool>();
         
-        private void ParseIF()
+    /*    private void ParseIF()
         {
             CurrentIndex++;
             if ( CurrentToken.TokenName == Lexer.Tokens.LeftParan )
@@ -279,10 +144,7 @@ namespace KlipCompiler
                 CurrentIndex++;
             }
             (var startIf, var endIf) = parseBlock();
-            /* if(CurrentToken.TokenName == Lexer.Tokens.Else || NextToken.TokenName == Lexer.Tokens.Else )
-             {
-                 (var startIndex, var EndIndex) = parseBlock();
-             }*/
+
             var cnt = IfStack.Count;
 
             if(op.TokenName == Lexer.Tokens.Equal )
@@ -333,69 +195,12 @@ namespace KlipCompiler
                 if ( CurrentToken.TokenName == Lexer.Tokens.Else || NextToken.TokenName == Lexer.Tokens.Else ) IfStack.Push( false );
 
         }
-
-        private (int,int) parseBlock()
-        {
-            //look for Int on current line or LeftBrace
-            //Look for left brace as next statement
-            // if neither found just next line
-
-            var start = 0;
-            var end = 0;
-            int lineCnt = -1;
-            var ifIndex = 0;
-            while ( CurrentToken.TokenName != Lexer.Tokens.NewLine )
-            {
-                if ( CurrentToken.TokenName == Lexer.Tokens.IntLiteral )
-                {
-                    lineCnt = int.Parse( CurrentToken.TokenValue ) + CurrentLine;
-                    start = CurrentIndex + 1;
-                    while ( CurrentLine != lineCnt ) CurrentIndex++;
-                    end = CurrentIndex;
-                    break;
-                }
-                else if ( CurrentToken.TokenName == Lexer.Tokens.LeftBrace )
-                {
-                    start = CurrentIndex + 1;
-                    while ( CurrentToken.TokenName != Lexer.Tokens.RightBrace )
-                    {
-                        CurrentIndex++;
-                    }
-                    CurrentIndex++;
-                    end = CurrentIndex;
-                    break;
-                }
-            }
-            while ( CurrentToken.TokenName == Lexer.Tokens.NewLine ) CurrentIndex++;
-
-            if ( ifIndex == 0 )
-            {
-                if ( CurrentToken.TokenName == Lexer.Tokens.LeftBrace )
-                {
-                    start = CurrentIndex + 1;
-                    while ( CurrentToken.TokenName != Lexer.Tokens.RightBrace )
-                    {
-                        CurrentIndex++;
-                    }
-                    CurrentIndex++;
-                    end = CurrentIndex;
-
-                }
-                else
-                {
-                    start = CurrentIndex + 1;
-
-                    while ( CurrentToken.TokenName != Lexer.Tokens.NewLine ) CurrentIndex++;
-                    end = CurrentIndex;
-
-                }
-            }
-            return (start, end);
-        }
+    */
+      
 
         private void EventMacro()
         {
-            if (CurrentToken.TokenName == Lexer.Tokens.IntLiteral)
+          /*  if (CurrentToken.TokenName == Lexer.Tokens.IntLiteral)
             {
                 int idOne = int.Parse(CurrentToken.TokenValue);
                 int idTwo = 0;
@@ -423,7 +228,7 @@ namespace KlipCompiler
             else
             {
                 throw new Exception($"Unhandled event {CurrentToken.TokenValue} at line {CurrentLine}");
-            }
+            }*/
         }
         public static T GetVariable<T>(string name)
         {
@@ -488,7 +293,7 @@ namespace KlipCompiler
         }
         private void Set()
         {
-            CurrentIndex++;
+          /*  CurrentIndex++;
             var variableName = ParseExpr();
             string varName = "";
             var value = ParseExpr().GetValue();
@@ -503,133 +308,10 @@ namespace KlipCompiler
                 Setvariable( varName, value );
             }
            
-
+    */
 
         }
         
-        Expr ParseExpr()
-        {
-            Expr ret = null;
-            Token t = CurrentToken;
-
-            if (NextToken.TokenName == Lexer.Tokens.LeftParan)
-            {
-               /* string ident = "";
-
-                if (t.TokenName == Lexer.Tokens.Ident || t.TokenName == Lexer.Tokens.BuildInIdent)
-                {
-                    ident = t.TokenValue.ToString();
-                }
-
-                CurrentIndex++;
-
-                if (NextToken.TokenName == Lexer.Tokens.RightParan)
-                {
-                    ret = new CallExpr(ident, new List<Expr>());
-                }
-                else
-                {
-                    //ret = new CallExpr(ident, ParseCallArgs());
-                }*/
-            }
-            else if (t.TokenName == Lexer.Tokens.IntLiteral)
-            {
-                IntLiteral i = new IntLiteral(Convert.ToInt32(t.TokenValue.ToString()));
-                ret = i;
-            }
-            else if (t.TokenName == Lexer.Tokens.StringLiteral)
-            {
-                StringLiteral s = new StringLiteral(t.TokenValue.ToString());
-                ret = s;
-            }
-            else if (t.TokenName == Lexer.Tokens.Ident || t.TokenName == Lexer.Tokens.BuildInIdent)
-            {
-                string ident = t.TokenValue.ToString();
-
-                Ident i = new Ident(ident);
-                ret = i;
-            }
-            else if (t.TokenName == Lexer.Tokens.LeftParan)
-            {
-                Expr e = ParseExpr();
-
-                if (NextToken.TokenName == Lexer.Tokens.RightParan)
-                {
-                    CurrentIndex++;
-                }
-
-                ParanExpr p = new ParanExpr(e);
-
-                if (NextToken.TokenName == Lexer.Tokens.Add)
-                {
-                    CurrentIndex++;
-                    Expr expr = ParseExpr();
-                    ret = new MathExpr(p, Symbol.add, expr);
-                }
-                else if (NextToken.TokenName == Lexer.Tokens.Sub)
-                {
-                    CurrentIndex++;
-                    Expr expr = ParseExpr();
-                    ret = new MathExpr(p, Symbol.sub, expr);
-                }
-                else if (NextToken.TokenName == Lexer.Tokens.Mul)
-                {
-                    CurrentIndex++;
-                    Expr expr = ParseExpr();
-                    ret = new MathExpr(p, Symbol.mul, expr);
-                }
-                else if (NextToken.TokenName == Lexer.Tokens.Div)
-                {
-                    CurrentIndex++;
-                    Expr expr = ParseExpr();
-                    ret = new MathExpr(p, Symbol.div, expr);
-                }
-                else if ( NextToken.TokenName == Lexer.Tokens.Comma )
-                {
-                    CurrentIndex++;
-                    Expr expr = ParseExpr();
-                    ret = new MathExpr( p, Symbol.Concat, expr );
-                }
-                else
-                {
-                    ret = p;
-                }
-            }
-
-            if (NextToken.TokenName == Lexer.Tokens.Add || NextToken.TokenName == Lexer.Tokens.Sub || NextToken.TokenName == Lexer.Tokens.Mul || NextToken.TokenName == Lexer.Tokens.Div || NextToken.TokenName == Lexer.Tokens.Comma )
-            {
-                Expr lexpr = ret;
-                Symbol op = 0;
-
-                if (NextToken.TokenName == Lexer.Tokens.Add)
-                {
-                    op = Symbol.add;
-                }
-                else if (NextToken.TokenName == Lexer.Tokens.Sub)
-                {
-                    op = Symbol.sub;
-                }
-                else if (NextToken.TokenName == Lexer.Tokens.Mul)
-                {
-                    op = Symbol.mul;
-                }
-                else if (NextToken.TokenName == Lexer.Tokens.Div)
-                {
-                    op = Symbol.div;
-                }
-                else if ( NextToken.TokenName == Lexer.Tokens.Comma )
-                {
-                    op = Symbol.Concat;
-                }
-                CurrentIndex++;
-                CurrentIndex++;
-                Expr rexpr = ParseExpr();
-
-                ret = new MathExpr(lexpr, op, rexpr);
-            }
-
-            CurrentIndex++;
-            return ret;
-        }
+     
     }
 }

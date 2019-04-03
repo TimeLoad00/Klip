@@ -1,5 +1,4 @@
 ﻿using Assistant;
-using KlipCompiler;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -58,7 +57,7 @@ namespace CEasyUO
         {
             try
             {
-                txtDebug.Text = "CurrentLine: " + Parser?.CurrentLine ?? "0";
+                //txtDebug.Text = "CurrentLine: " + Parser?.CurrentLine ?? "0";
                 Dictionary<string, object> charinfo = new Dictionary<string, object>();
                 if ( !Engine.IsInstalled || World.Player == null )
                 {
@@ -76,34 +75,34 @@ namespace CEasyUO
                 charinfo.Add( "#CHARBACKPACKID", uintToEUO( World.Player?.Backpack?.Serial ?? 0) );
 
                 Dictionary<string, object> last = new Dictionary<string, object>();
-                last.Add( "#LOBJECTID", EUOParser.GetVariable<string>( "#LOBJECTID" ) );
-                last.Add( "#LOBJECTTYPE", EUOParser.GetVariable<string>( "#LOBJECTTYPE" ) );
-                last.Add( "#LTARGETID", EUOParser.GetVariable<string>( "#LTARGETID" ) );
-                last.Add( "#LTARGETX", EUOParser.GetVariable<string>( "#LTARGETX" ) );
-                last.Add( "#LTARGETY", EUOParser.GetVariable<string>( "#LTARGETY" ) );
-                last.Add( "#LTARGETZ", EUOParser.GetVariable<string>( "#LTARGETZ" ) );
-                last.Add( "#LTARGETKIND", EUOParser.GetVariable<string>( "#LTARGETKIND" ) );
-                last.Add( "#LTARGETTILE", EUOParser.GetVariable<string>( "#LTARGETTILE" ) );
-                last.Add( "#LSKILL", EUOParser.GetVariable<string>( "#LSKILL" ) );
-                last.Add( "#LSPELL", EUOParser.GetVariable<string>( "#LSPELL" ) );
+                last.Add( "#LOBJECTID", EUOInterpreter.GetVariable<string>( "#LOBJECTID" ) );
+                last.Add( "#LOBJECTTYPE", EUOInterpreter.GetVariable<string>( "#LOBJECTTYPE" ) );
+                last.Add( "#LTARGETID", EUOInterpreter.GetVariable<string>( "#LTARGETID" ) );
+                last.Add( "#LTARGETX", EUOInterpreter.GetVariable<string>( "#LTARGETX" ) );
+                last.Add( "#LTARGETY", EUOInterpreter.GetVariable<string>( "#LTARGETY" ) );
+                last.Add( "#LTARGETZ", EUOInterpreter.GetVariable<string>( "#LTARGETZ" ) );
+                last.Add( "#LTARGETKIND", EUOInterpreter.GetVariable<string>( "#LTARGETKIND" ) );
+                last.Add( "#LTARGETTILE", EUOInterpreter.GetVariable<string>( "#LTARGETTILE" ) );
+                last.Add( "#LSKILL", EUOInterpreter.GetVariable<string>( "#LSKILL" ) );
+                last.Add( "#LSPELL", EUOInterpreter.GetVariable<string>( "#LSPELL" ) );
 
 
 
                 Dictionary<string, object> find = new Dictionary<string, object>();
-                find.Add( "#FINDID", EUOParser.GetVariable<string>( "#findid" ) );
-                find.Add( "#FINDTYPE", EUOParser.GetVariable<string>( "#FINDTYPE" ) );
-                find.Add( "#FINDX", EUOParser.GetVariable<string>( "#FINDX" ) );
-                find.Add( "#FINDY", EUOParser.GetVariable<string>( "#FINDY" ) );
-                find.Add( "#FINDZ", EUOParser.GetVariable<string>( "#FINDZ" ) );
-                find.Add( "#FINDDIST", EUOParser.GetVariable<string>( "#FINDZ" ) );
-                find.Add( "#FINDKIND", EUOParser.GetVariable<string>( "#FINDZ" ) );
-                find.Add( "#FINDSTACK", EUOParser.GetVariable<string>( "#FINDZ" ) );
-                find.Add( "#FINDBAGID", EUOParser.GetVariable<string>( "#FINDZ" ) );
-                find.Add( "#FINDMOD", EUOParser.GetVariable<string>( "#FINDZ" ) );
-                find.Add( "#FINDREP", EUOParser.GetVariable<string>( "#FINDZ" ) );
-                find.Add( "#FINDCOL", EUOParser.GetVariable<string>( "#FINDZ" ) );
-                find.Add( "#FINDINDEX", EUOParser.GetVariable<string>( "#FINDZ" ) );
-                find.Add( "#FINDCNT", EUOParser.GetVariable<string>( "#FINDZ" ) );
+                find.Add( "#FINDID", EUOInterpreter.GetVariable<string>( "#findid" ) );
+                find.Add( "#FINDTYPE", EUOInterpreter.GetVariable<string>( "#FINDTYPE" ) );
+                find.Add( "#FINDX", EUOInterpreter.GetVariable<string>( "#FINDX" ) );
+                find.Add( "#FINDY", EUOInterpreter.GetVariable<string>( "#FINDY" ) );
+                find.Add( "#FINDZ", EUOInterpreter.GetVariable<string>( "#FINDZ" ) );
+                find.Add( "#FINDDIST", EUOInterpreter.GetVariable<string>( "#FINDZ" ) );
+                find.Add( "#FINDKIND", EUOInterpreter.GetVariable<string>( "#FINDZ" ) );
+                find.Add( "#FINDSTACK", EUOInterpreter.GetVariable<string>( "#FINDZ" ) );
+                find.Add( "#FINDBAGID", EUOInterpreter.GetVariable<string>( "#FINDZ" ) );
+                find.Add( "#FINDMOD", EUOInterpreter.GetVariable<string>( "#FINDZ" ) );
+                find.Add( "#FINDREP", EUOInterpreter.GetVariable<string>( "#FINDZ" ) );
+                find.Add( "#FINDCOL", EUOInterpreter.GetVariable<string>( "#FINDZ" ) );
+                find.Add( "#FINDINDEX", EUOInterpreter.GetVariable<string>( "#FINDZ" ) );
+                find.Add( "#FINDCNT", EUOInterpreter.GetVariable<string>( "#FINDZ" ) );
 
 
                 foreach ( TreeNode n in treeVarTree.Nodes )
@@ -182,11 +181,12 @@ public static string uintToEUO(uint Num)
             return ( ret - 7 ) ^ 0x45;
         }
 
-        public EUOParser Parser;
+        public EUOInterpreter Parser;
         private void btnPlayClicked( object sender, EventArgs e )
         {
-            if ( Parser == null || Parser.Script != txtScriptEntry.Text )
-                Parser = new EUOParser( txtScriptEntry.Text );
+            //if ( Parser == null || Parser.Script != txtScriptEntry.Text )
+                Parser = new EUOInterpreter( txtScriptEntry.Text );
+                
             Parser.Run();
         }
 
@@ -204,10 +204,10 @@ public static string uintToEUO(uint Num)
         {
             try
             {
-                if ( Parser == null || Parser.Script != txtScriptEntry.Text )
-                    Parser = new EUOParser( txtScriptEntry.Text );
-                Parser.Line();
-                txtDebug.Text = "Current Line: " + Parser.CurrentLine;
+               // if ( Parser == null || Parser.Script != txtScriptEntry.Text )
+                //    Parser = new EUOParser( txtScriptEntry.Text );
+                //Parser.Line();
+               // txtDebug.Text = "Current Line: " + Parser.CurrentLine;
             } catch(Exception ee )
             {
                 txtDebug.Text = "E: " + ee.Message;
