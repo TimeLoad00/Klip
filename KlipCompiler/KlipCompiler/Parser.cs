@@ -106,7 +106,7 @@ namespace KlipCompiler
                     Return r = ParseReturn();
                     currentBlock.AddStmt(r);
                 }
-                else if (tok.TokenName == Lexer.Tokens.RightParan)
+                else if (tok.TokenName == Lexer.Tokens.RightBrace)
                 {
                     if (currentBlock is Func)
                     {

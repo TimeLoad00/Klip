@@ -1,0 +1,728 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="txtScriptEntry.Text" xml:space="preserve">
+    <value>; Configuration
+if ( #charName = Night )
+{
+    set %runebookId TJQDKMD          ; Runebook ID
+    set %dropContainerId XWNAKMD
+    set %lumberjackSpots 8           ; Number of spots in runebook
+}
+if ( #charName = Dragono )
+{
+    set %runebookId TSNFKMD          ; Runebook ID
+    set %dropContainerId BCCWJMD
+    set %lumberjackSpots 6           ; Number of spots in runebook
+}
+set %area 40                     ; Area to scan
+set %pathfindTimeout 10          ; Maximum time allowed per pathfind (seconds)
+set %maximumPathfindDistance 17  ; Maximum distance to pathFind
+set %smartPathFindTimeout 60     ; Maximum time allowed per smart pathfind (seconds)
+set %rechargeRunebook #true      ; Recharge runebook (#true/#false)
+set %maxRunebookCharges 10       ; Maximum charges in runebook
+set %toolsToCraft 10             ; When out of hatchets, amount to craft
+set %toolsRecharge 5             ; Amount of tools to have before going back lumberjacking (1 if you got newbied hatchet)
+set %deathTime 2400              ; Time to wait before resurrecting (20 = 1 second)
+
+; Constants
+set %tools FSF_ASF
+set %tinkeringTools GTL
+set %recallScrolls WTL
+set %treasureBalls DMF
+
+; Stats
+set %recallScrollsUsed 0
+set %toolsUsed 0
+
+; Variables
+set %currentLumberjackSpot 1
+set %ironRequiredTool 4
+set %bankingRequired #false
+
+tile init
+
+lumberjacking:
+set %bankingRequired #false
+gosub resetSpots
+for %currentSpot 1 %spots
+{
+    set %spotX %spotX . %currentSpot
+    set %spotY %spotY . %currentSpot
+    set %spotZ %spotZ . %currentSpot
+    set %spotTileType %spotTileType . %currentSpot
+    
+    gosub smartPathFind %spotX %spotY %spotZ 1
+    gosub lumberjack %spotX %spotY %spotZ %spotTileType
+    
+    if ( #charGhost = yes )
+    {
+        gosub resurrect
+        break
+    }
+    
+    if ( %bankingRequired = #true )
+        break
+}
+set %currentLumberjackSpot %currentLumberjackSpot + 1
+if ( %currentLumberjackSpot &gt; %lumberjackSpots )
+    set %currentLumberjackSpot 1
+gosub bank
+goto lumberjacking
+
+sub resetSpots
+linesPerCycle 1000
+set %_startX #charPosX - %area
+set %_endX #charPosX + %area
+set %_startY #charPosY - %area
+set %_endY #charPosY + %area
+set %spots 0
+for %_resetSpotsLoopX %_startX %_endX
+{
+    for %_resetSpotsLoopY %_startY %_endY
+    {
+        tile cnt %_resetSpotsLoopX %_resetSpotsLoopY
+        
+        for %_resetSpotsLoopTile 1 #tileCnt
+        {
+            tile get %_resetSpotsLoopX %_resetSpotsLoopY %_resetSpotsLoopTile
+            
+            if ( #tiletype &gt;= 3277 &amp;&amp; #tiletype &lt;= 3302 )
+            {
+                set %spots %spots + 1
+                set %spotX . %spots %_resetSpotsLoopX
+                set %spotY . %spots %_resetSpotsLoopY
+                set %spotZ . %spots #tileZ
+                set %spotTileType . %spots #tileType
+                break
+            }
+        }
+    }
+}
+linesPerCycle 10
+return
+
+; gosub smartPathFind [x] [y] [z] [tolerance]
+sub smartPathFind
+linesPerCycle 1000
+set %_smartPathFindX %1
+set %_smartPathFindY %2
+set %_smartPathFindZ %3
+set %_smartPathFindTolerance %4
+set %_smartPathFindTimeout #scnt + %smartPathFindTimeout
+gosub isCharPosWithinTolerance %_smartPathFindX %_smartPathFindY %maximumPathfindDistance
+while ( #result = #false )
+{
+    if ( %_smartPathFindTimeout &lt; #scnt )
+        break
+
+    set %_bestCandidateX #charPosX
+    set %_bestCandidateY #charPosY
+    set %_bestCandidateZ #charPosZ
+
+    for %_candidate 1 %spots
+    {
+        set %_candidateX %spotX . %_candidate
+        set %_candidateY %spotY . %_candidate
+        set %_candidateZ %spotZ . %_candidate
+
+        gosub isBetterSmartPathFindCandidate %_candidateX %_candidateY %_smartPathFindX %_smartPathFindY %_bestCandidateX %_bestCandidateY %maximumPathfindDistance
+        if ( #result = #true )
+        {
+            set %_bestCandidateX %_candidateX
+            set %_bestCandidateY %_candidateY
+            set %_bestCandidateZ %_candidateZ
+        }
+    }
+
+    if ( %_bestCandidateX = #charPosX &amp;&amp; %_bestCandidateY = #charPosY )
+        goto _smartPathFindReturnFalse ; no candidate found
+
+    gosub pathFind %_bestCandidateX %_bestCandidateY %_bestCandidateZ %_smartPathFindTolerance
+    if ( #result = #false )
+        goto _smartPathFindReturnFalse
+    gosub isCharPosWithinTolerance %_smartPathFindX %_smartPathFindY %maximumPathfindDistance
+}
+linesPerCycle 10
+gosub pathFind %_smartPathFindX %_smartPathFindY %_smartPathFindZ %_smartPathFindTolerance %_smartPathFindTimeout
+return #result
+_smartPathFindReturnFalse:
+linesPerCycle 10
+return #false
+
+; gosub isBetterSmartPathFindCandidate candidateX candidateY destinationX destinationY bestCandidateX bestCandidateY maxDistance
+sub isBetterSmartPathFindCandidate
+set %_distanceToCandidateX #charPosX - %1 abs
+set %_distanceToCandidateY #charPosY - %2 abs
+
+if ( %_distanceToCandidateX &gt; %7 || %_distanceToCandidateY &gt; %7 )
+    return #false ; Candidate is out of reach
+
+set %_distanceCandidateToDestinationX %1 - %3 abs
+set %_distanceCandidateToDestinationY %2 - %4 abs
+set %_distanceCandidateToDestination %_distanceCandidateToDestinationX + %_distanceCandidateToDestinationY
+
+set %_distanceBestCandidateToDestinationX %5 - %3 abs
+set %_distanceBestCandidateToDestinationY %6 - %4 abs
+set %_distanceBestCandidateToDestination %_distanceBestCandidateToDestinationX + %_distanceBestCandidateToDestinationY
+
+if ( %_distanceCandidateToDestination &lt; %_distanceBestCandidateToDestination )
+    return #true ; Candidate is in reach and nearer to wanted destination
+
+return #false ; Candidate is in reach, but farer to wanted destination
+
+; gosub pathfind [x] [y] [z] [tolerance]
+sub pathfind
+set %_pathFindX %1
+set %_pathFindY %2
+set %_pathFindZ %3
+set %_pathFindTolerance %4
+set %_pathfindMoved #false
+set %_timeout #scnt + %pathfindTimeout
+set %_journal #jIndex + 1
+gosub isCharPosWithinTolerance %_pathFindX %_pathFindY %_pathFindTolerance
+if ( #result = #true )
+{
+    if ( %_pathfindMoved = #true )
+        event pathfind 0 0 0
+    return #true
+}
+event pathfind %_pathFindX %_pathFindY %_pathFindZ
+_pathfind:
+gosub isCharPosWithinTolerance %_pathFindX %_pathFindY %_pathFindTolerance
+if ( #result = #true )
+{
+    if ( %_pathfindMoved = #true )
+        event pathfind 0 0 0
+    return #true
+}
+if ( %_timeout &lt; #scnt )
+{
+    if ( %_pathfindMoved = #true )
+        event pathfind 0 0 0
+    return #false
+}
+if ( %_journal &lt;= #jIndex )
+{
+    scanJournal %_journal
+    if ( get_there in #journal )
+        return #false
+    if ( pathfinding in #journal )
+        set %_pathfindMoved #true
+    set %_journal %_journal + 1
+}
+goto _pathfind
+
+sub isCharPosWithinTolerance
+set %_x %1
+set %_y %2
+set %_dist %3
+set %_distX #charPosX - %_x abs
+set %_distY #charPosY - %_y abs
+if ( %_distX &lt;= %_dist &amp;&amp; %_distY &lt;= %_dist )
+    return #true
+return #false
+
+sub lumberjack
+set %_lumberjackX %1
+set %_lumberjackY %2
+set %_lumberjackZ %3
+set %_lumberjackTileType %4
+_lumberjack:
+findItem %tools C_
+if ( #findKind = -1 )
+{
+    set %bankingRequired #true
+    return
+}
+set #lObjectId #findId
+set #lTargetX %_lumberjackX
+set #lTargetY %_lumberjackY
+set #lTargetZ %_lumberjackZ
+set #lTargetTile %_lumberjackTileType
+set #lTargetKind 3
+set %_lumberjackJournal #jIndex
+event macro 17
+target
+event macro 22
+set %_lumberjackTimeout #scnt + 10
+_lumberjackJournal:
+if ( %_lumberjackTimeout &lt; #scnt )
+    return
+if ( #jIndex &lt;= %_journal )
+    goto _lumberjackJournal
+set %_journal %_journal + 1
+scanJournal %_journal
+if ( you_hack_at_the_tree in #journal )
+    goto _lumberjack
+if ( you_put in #journal )
+    goto _lumberjack
+if ( there_is_nothing in #journal )
+    return
+if ( it_appears_immune in #journal )
+    return
+if ( reach_this in #journal )
+    return
+goto _lumberjackJournal
+
+sub bank
+gosub recall 1
+gosub dropLogs
+gosub dropTreasureBalls
+gosub restockTools
+if ( %rechargeRunebook = #true )
+    gosub rechargeRunebook
+set %_currentLumberjackSpot %currentLumberjackSpot + 1
+gosub recall %_currentLumberjackSpot
+return
+
+sub restockTools
+ignoreItem reset
+_restockTools:
+findItem %tools C_ , #backPackId
+if ( #findCnt &gt;= %toolsRecharge )
+    return
+set %toolsToGrab %toolsRecharge - #findCnt
+gosub openContainer %dropContainerId
+findItem %tools C_ , %dropContainerId
+if ( #findCnt &lt; %toolsToGrab )
+{
+    gosub craftTools
+    gosub dropLogs ; safety
+    goto _restockTools
+}
+for %_loop 1 %toolsToGrab
+{
+    findItem %tools C_ , %dropContainerId
+    exevent drag #findId
+    exevent dropC #backPackId
+    wait 10
+}
+set %toolsUsed %toolsUsed + %toolsToGrab
+return
+
+sub craftTools
+ignoreItem reset
+findItem %tinkeringTools C_ , %dropContainerId
+if ( #findKind = -1 )
+    pause
+exevent drag #findId 1
+exevent dropC #backPackId
+wait 10
+_findIronIngots:
+findItem RMK C_ , %dropContainerId
+if ( #findKind = -1 )
+    pause
+if ( #findCol &lt;&gt; 0 )
+{
+    ignoreItem #findId
+    goto _findIronIngots
+}
+set %_ironAmount %ironRequiredTool * %toolsToCraft
+exevent drag #findId %_ironAmount
+exevent dropC #backPackId
+wait 10
+ignoreItem reset
+_craftTool:
+findItem RMK C_ , #backPackId
+if ( #findCol &lt;&gt; 0 )
+{
+    ignoreItem #findId
+    goto _craftTool
+}
+if ( #findKind = -1 || #findStack &lt; %ironRequiredTool )
+    goto _dropTinkeringTools
+msg $,waitmenu 'Tinkering' 'Tools' 'Tools' 'hatchet'$
+findItem %tinkeringTools C_ , #backPackId
+set #lObjectId #findId
+event macro 17
+wait 80
+goto _craftTool
+_dropTinkeringTools:
+ignoreItem reset
+findItem %tinkeringTools C_ , #backPackId
+exevent drag #findId 1
+exevent dropC %dropContainerId
+wait 10
+_dropTools:
+findItem %tools C_ , #backPackId
+if ( #findKind = -1 )
+    return
+exevent drag #findId 1
+exevent dropC %dropContainerId 50 50
+wait 10
+goto _dropTools
+
+; gosub recall [rune]
+sub recall
+set %_rune %1
+if ( %_rune &lt;= 8 )
+{
+    set %_runeX 85
+    set %_runeY 115 + ( ( %_rune - 1 ) * 14 )
+}
+else
+{
+    set %_runeX 245
+    set %_runeY 115 + ( ( %_rune - 9 ) * 14 )
+}
+set %_charPosX #charPosX
+set %_charPosY #charPosY
+_openRunebook:
+set %_openRunebook #scnt + 10
+set #lObjectId %runebookId
+event macro 17
+_waitOpenRunebook:
+if ( %_openRunebook &lt; #scnt )
+   goto _openRunebook
+if ( #contSizeX &lt;&gt; 352 || #contSizeY &lt;&gt; 226 )
+   goto _waitOpenRunebook
+set %_recall #scnt + 10
+click %_runeX %_runeY
+_waitRecall:
+if ( %_recall &lt; #scnt )
+    goto _openRunebook
+if ( #charPosX &lt;&gt; %_charPosX || #charPosY &lt;&gt; %_charPosY )
+    return
+goto _waitRecall
+
+sub rechargeRunebook
+ignoreItem reset
+gosub openContainer %dropContainerId
+_rechargeRunebook:
+findItem %recallScrolls C_ , %dropContainerId
+if ( #findKind = -1 )
+    pause ; Out of recall scrolls
+if ( #findCol &lt;&gt; 0 )
+{
+    ignoreItem #findId
+    goto rechargeRunebook
+}
+exevent drag #findId %maxRunebookCharges
+exevent dropC %runebookId
+wait 10
+findItem %recallScrolls C_ , #backPackId
+set %recallScrollsUsed %recallScrollsUsed + ( %maxRunebookCharges - #findStack )
+exevent drag #findId #findStack
+exevent dropC %dropContainerId
+wait 10
+return
+
+; gosub openContainer [containerId]
+sub openContainer
+set %_containerId %1
+_openContainer:
+set #lObjectId %_containerId
+event macro 17
+set %_timeout #scnt + 10
+_waitOpenContainer:
+if ( %_timeout &lt; #scnt )
+    goto _openContainer
+if ( #contId = %_containerId )
+   return
+goto _openContainer
+
+sub dropLogs
+ignoreItem reset
+_dropLogs:
+findItem ZLK_RMK C_ , #backPackId
+if ( #findKind = -1 )
+    return
+exevent drag #findId #findStack
+exevent dropC %dropContainerId
+wait 10
+goto _dropLogs
+
+sub dropTreasureBalls
+ignoreItem reset
+_dropTreasureBalls:
+findItem %treasureBalls C_ , #backPackId
+if ( #findKind = -1 )
+    return
+exevent drag #findId 1
+exevent dropC %dropContainerId
+wait 10
+goto _dropTreasureBalls
+
+sub resurrect
+set %_resurrectX #charPosX
+set %_resurrectY #charPosY
+_resurrect:
+if ( #charGhost &lt;&gt; yes )
+    return
+msg $home home home$
+wait 10
+if ( #charPosX = %_resurrectX || #charPosY = %_resurrectY )
+    goto _resurrect
+wait %deathTime
+gosub pathfind 5182 1250 0 1
+gosub pathfind 5182 1237 0 1
+gosub pathfind 5182 1228 10 0
+gosub pathfind 5182 1223 40 1
+move 5182 1223 1 30s
+ignoreItem reset
+_clickResurrectionStone:
+findItem HTG G_1
+if ( #findKind = -1 )
+    pause
+if ( #findCol &lt;&gt; 66 )
+{
+    ignoreItem #findId
+    goto _clickResurrectionStone
+}
+ignoreItem reset
+set #lObjectId #findId
+event macro 17
+gosub waitGump 380 150
+if ( #result = #false )
+    goto _clickResurrectionStone
+click 72 100
+wait 120
+if ( #charGhost = yes )
+    goto _clickResurrectionStone
+event macro 8 1 ; open paperdoll
+event macro 8 2 ; open status
+event macro 8 7 ; open backpack
+wait 20
+move 5194 1229 0 10s
+return
+
+; gosub waitGump width height
+sub waitGump
+set %_waitGumpWidth %1
+set %_waitGumpHeight %2
+set %_waitGumpTimeout #scnt + 5
+_waitGump:
+if ( %_waitGumpTimeout &lt; #scnt )
+    return #false
+if ( #contSizeX = %_waitGumpWidth &amp;&amp; #contSizeY = %_waitGumpHeight )
+    return #true
+goto _waitGump
+</value>
+  </data>
+  <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btnNew.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABfSURBVDhPzcoxDgAhEELRuf+lNQg2i6KFxf5kMgWvXtYO
+        d6ztwqaLiXtzwx9y00CrsH1umXgOjtwTycGReyI5OHJPJAdH7onk4Mg9kRwcuSeSgyP3RHJw5N4cb+43
+        VXWxN5h2GtXL+gAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="btnOpen.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABdSURBVDhPzY4BCsAgDMR8uj/vCHJlruLUwljgKOqlWL7C
+        btnmKel8tEyE3+hiZWvomhmB7nGUIS7PJr1Wj3hpNum1esRLmtxtBLGXa32PZEjJkJIhJYMeVvI7SrkA
+        G1/vNRaHbsAAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="btnSave.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABQSURBVDhP3YxJCgAgDAP7dH+uhJIggkvVgzgQLGaxW+RN
+        iZySf85gBi+KJDRQSYQGmEWR/DJQGV01OSFjVeh41WmNobYGCO43B4DCAZ1iVgBP6Iyo8QiMcwAAAABJ
+        RU5ErkJggg==
+</value>
+  </data>
+  <data name="toolStripButton1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABNSURBVDhPrc47DgAgCERB7n8qboYEpdBo+KyvIRazkf4n
+        JMws61XPMDTiuDuy4dbIiasjV+w31Qv7jQpw4hcQ1iBsQViDsAXhGYSLEQ3oEK4fx9qumgAAAABJRU5E
+        rkJggg==
+</value>
+  </data>
+  <data name="toolStripButton2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABuSURBVDhPrY1BCsAwDMP69Py8o4uz2GT4VEEwVIKui8SO
+        iH02j3EOVKCbOEfoLxo5ByrQTZwjOpiRc6AC3cQ5ooMZOQcq0E2cIzqYkXOgAt3EOaKDGTkHKtBNnCM6
+        mJFzHx3MyDniCD48v/y7tR6j8SJ+dmnfjQAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="toolStripButton3.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB8SURBVDhPjY1BEsAgCAN5uj+34JgaEZSd2UMlSSWiifTI
+        ec75w026pjfnADzJil4aWlTL8BixBw683AbCv4Pke3TUMZL+3UO32oAJ3HttwEO39wAIvlG+D1w8Bozq
+        SFg28MhhlotQa+YiCmVqfC8T4xiVTNwt+ILDrEPkA426iyckmvhvAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnStep.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIDSURBVDhPpZLrS5NhGMb3j4SWh0oRQVExD4gonkDpg4hG
+        YKxG6WBogkMZKgPNCEVJFBGdGETEvgwyO9DJE5syZw3PIlPEE9pgBCLZ5XvdMB8Ew8gXbl54nuf63dd9
+        0OGSnwCahxbPRNPAPMw9Xpg6ZmF46kZZ0xSKzJPIrhpDWsVnpBhGkKx3nAX8Pv7z1zg8OoY/cITdn4fw
+        bf/C0kYAN3Ma/w3gWfZL5kzTKBxjWyK2DftwI9tyMYCZKXbNHaD91bLYJrDXsYbrWfUKwJrPE9M2M1Oc
+        VzOOpHI7Jr376Hi9ogHqFIANO0/MmmmbmSmm9a8ze+I4MrNWAdjtoJgWcx+PSzg166yZZ8xM8XvXDix9
+        c4jIqFYAjoriBV9AhEPv1mH/sonogha0afbZMMZz+yreTGyhpusHwtNNCsA5U1zS4BLxzJIfg299qO32
+        Ir7UJtZfftyATqeT+8o2D8JSjQrAJblrncYL7ZJ2+bfaFnC/1S1NjL3diRat7qrO7wLRP3HjWsojBeCo
+        mDEo5mNjuweFGvjWg2EBhCbpkW78htSHHwRyNdmgAFzPEee2iFkzayy2OLXzT4gr6UdUnlXrullsxxQ+
+        kx0g8BTA3aZlButjSTyjODq/WcQcW/B/Je4OQhLvKQDnzN1mp0nnkvAhR8VuMzNrpm1mpjgkoVwB/v8D
+        TgDQASA1MVpwzwAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAICAIAAAAAACoCAAAFgAAACgAAAAgAAAAQAAAAAEACAAAAAAAAAQAAAAAAAAAAAAAAAEAAAAB
+        AAD/////iPkSAEibg3wIJoB8/////wAmgHxCJYB8mAAAACrakXzHJIB8mAAAAAAAAACY+RIAeldtdJgA
+        AAAAX210DDBudLC3FQCgAgkAhAHRAAAA0QCgAgkADDBudGT5EgB0+RIAmAAAAJgAAAAIX210/////wBf
+        bXTv92t08A8AAMbAAAACAAAAf/hrdBipAACo+xIAeFWDANj5EgAmizZ+eFWDAOz///8AAAAAqPsSADBK
+        NgAAAAAAAAAAAADw/X9E+hIAKiaAfAD6EgAAJoB8zPoSAAAAAAAAAAAAFAAAAAEAAAAAAAAAAAAAABAA
+        AACADwX9/////wCA/X8A8P1/FPoSAAAAAAD0+RIAAAAAAJT6EgBIm4N8CCaAfP////8AJoB8QiWAfJgA
+        AAAq2pF8xySAfJgAAAAAAAAApPoSAHpXbXSYAAAAKl1tdMz6EgAAAAAAAAAAAAQA0QDGwAAAwAAAALB3
+        N373dzd+nAEAAMbAAAAAAAAAAAAAANz6EgAq2pF8xySAfIAAAAAAAAAAZPsSAFFZanRWWWp08A8AAICK
+        Nn4AAAAAnAEAAAAAAAAAAAAAAAAAAAAAAADICzwAAAA8AMALPAAAADwAAAA8AAAAPAAAADwAoE29AKCc
+        xQDwDwAA6gIEAAAAPABE+xIAAAA8AFABAAAAADwAAAA8APYCBAAAAAAAAAAAAPAPAAAAAAAAXDBudEqA
+        TgABAAAAAgAAAAUAAADA+hIAbPsSALT7EgCm8W10MBdqdP////9WWWp0gPsSAAG0N36wA4AABAAAAAQA
+        CgAAAAAAxPsSADETa3SXAAIABAAAAAYDBgA2E2t0BAAAAAQACgAAAAAAAAA8AJcAAgCY+xIAAAAAACT8
+        EgCm8W10QBNrdP////82E2t0Ixk4fgQAAAAGAwYAAAAAAAAAAAB4Y0wAzPwSAADw/X8AAAAA6gIEAAQA
+        AAABAAAANPwSABezN34EAAoABgMGAAAAAAAmszd+AAAAAHhjTADM/BIAEPwSALj8EgC4/BIAjwQ5fjCz
+        N37/////EFTIAPlGQAA8VMgAf3NEAAQAAAAQVMgA/XBEABBUyAAUckQAAAAAAPSGwQDsqUMAsPwSAHlt
+        RAAAAAAAAAAAALD8EgAAAAAAEFTIAOypQwAdbUQANCtOAHCYvwBjf04AuPwSAHh/TgCAf04ANzZAAAIA
+        AAA8/RIApkZAAG5uQAA0K04AcJi/AKKFTgCqhU4ABgMGAHCYvwBYAAAABgMGAAAAQAB8AbcAAAAAAAAA
+        AABE/RIAikZAAE9tQAAEAAAAmm9AAET9EgAEAAAAOwAAAN1+QAD0hsEAOAAAAEz9EgAAAAAAAAAAAKDJ
+        yACOe0cAm5ubm5ubm5ubm5ubm5ubA5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubmwNWA5ubm5ub
+        m5ubm5ubm5ubm5ubm5ubm5ubm5ubmwAAYgNi/v6bm5ubm5ubm5ubm5ubm5ubm5ubm5ubmwD+JWJiA2Ji
+        JSUAm5ubm5ubm5ubm5ubm5ubm5ubm5sAJWJimwMDm5tiYiUAm5ubm5ubm5ubm5ubm5ubm5ubACVimwMD
+        A1YDAwMPYiUAm5ubm5ubm5ubm5ubm5ubmwAlYpsDm5ubA5ubmwObYiUAm5ubm5ubm5ubm5ubm5slJSWb
+        A5ubm5ubm5ubmwObYiUlm5ubm5ubm5ubm5ubm/4lYpubm5ubm5ubm5ubm5tiJf6bm5ubm5ubm5ubm5ub
+        /mKbA5ubm5ubm5ubm5ubA5ti/ptWVlabm5ubm5ubmwNiYpsDm5ubm5ubm5ubm5sDm2JiA5tWVpubm5ub
+        m5ubVgMDA1YDm5ubm5ubm5ubA1YDAwNWm1ZWVpubVlZWVlZWVlabA5tWVlabVlabm1ZWVlZiYgObVlZW
+        m5tWVlZWVlZWVpsDVlZWVlZWm5tWVlZWVlYlm5tWVlabm1ZWm5ubm/4lYptWVpubVlabm5ubm5tWVv6b
+        VlabVlabVlabm5ubmwBimwNWVptWVpubm1ZWVlZWm5tWVptWVptWVpubm5ub/iVimwNWVlZWm5tWVlZW
+        Vv6bm1ZWm1ZWm1ZWVlZWVlZW/iVimwMDVlZiA1ZWYiX+m5ubVlabVlabVlZWVlZWVlab/lZWVlZWVgNi
+        VlZWVlZWm1ZWm5ubVlZWVpubm5ubm5ubm1ZWVlZim1ZiVlZWVpubVlabm5tWVlZWm5ubm5ubm5sl/mhi
+        A5sDJWIAJZubm5ubm5ubm5ubVlZWVlZWVlYA/v4laCWbVpslaGL+AACbm5ubm5ubm5tWVlZWVlZWVv4l
+        aCWbm5ubm5ubJWIl/gCbm5ubm5ubm5ubm5ubm/7+JWglm5ubm5ubm5ubJWIl/gCbm5ubm5ubm5ubm5v+
+        ACViJZubm5ubm5ubm5ubJWIl/v6bm5ubm5ubm5ubm5tiYpubm5ubm5ubm5ubm5ubm2Jim5ubm5ubm5ub
+        m5ubAwMDA5ubm5ubm5ubm5ubm5sDAwMDm5ubm5ubm5ubm5ubJWKbm5ubm5ubm5ubm5ubm5tiYpubm5ub
+        m5ubm5ubm5sAJWKbm5ubm5ubm5ubm5ubYiX+m5ubm5ubm5ubm5ubm5v+JWKbm5ubm5ubm5ubm2IlJZub
+        m5ubm5ubm5ubm5ub/gD+/v6bm5ubm5ubm5sA/v7+/pubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ub
+        m5ubm5ubm5ubm//8f///8B///8AH//+AA///AAH//gAA//wAAH/4DuA/+B/wP/gf8AfwH/AH4A/gAwAC
+        YAMAAMAjOAzwCTwE4Ek8AABJAAAAyQAAAJw/gAGcPwAB/wAAAP8AAoB/+A/gP/Af8B/wP/gf8D/4H/A/
+        +B/4P/g//B/wf/gP4D/8H/B/
+</value>
+  </data>
+</root>
